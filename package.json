@@ -17,5 +17,9 @@
     "grunt-contrib-watch": "~0.6.1",
     "minimist": "0.0.8",
     "express": "3.x"
+  },
+  "devDependencies": {
+    "grunt-nodemon": "~0.3.0",
+    "grunt-concurrent": "~0.5.0"
   }
 }

@@ -8,8 +8,12 @@
         "statusCode" : 200,
         "body" : "{\"key\": \"value\"}",
         "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "values": ["Content-Type, Authorization"]
+        },
+        {
             "name": "Content-Type",
-            "values": ["application/json"]
+            "values": ["application/json; charset=utf-8"]
         } ],
         "delay": {
             "value": 1

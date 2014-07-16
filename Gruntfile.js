@@ -15,6 +15,25 @@ module.exports = function(grunt) {
       js:  '**/*.js'
     },
 
+    concurrent: {
+      dev: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
+    nodemon: {
+      dev: {
+        script: 'bin/seahorse',
+        options: {
+          args: ["example.json"],
+          nodeArgs: ['--debug']
+        }
+      }
+    },
+
     // contrib-watch plugin configuration.
     watch: {
       jshint: {
@@ -45,8 +64,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-nodemon');
 
   // Default task(s).
+  grunt.registerTask('dev', ['concurrent:dev']);
   grunt.registerTask('default', ['clean:all', 'jshint']);
 
 };
