@@ -1,0 +1,37 @@
+{
+  "routes": [{
+    "httpRequest" : {
+        "method" : "POST",
+        "path" : "/help"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"key\": \"value\"}",
+        "headers" : [ {
+            "name": "Content-Type",
+            "values": ["application/json"]
+        } ],
+        "delay": {
+            "value": 1
+        }
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "GET",
+        "path" : "/help",
+        "queryString" : "id=1"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "file":"/lib/help.txt",
+        "headers" : [ {
+            "name": "Content-Type",
+            "values": ["application/json"]
+        } ],
+        "delay": {
+            "value": 1000
+        }
+    }
+  }]
+}

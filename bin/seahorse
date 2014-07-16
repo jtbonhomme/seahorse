@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+var seahorse       = require('../lib/seahorse');
+var minimist       = require('minimist');
+
+var argv = minimist(process.argv.slice(2));
+seahorse.run(argv);
