@@ -74,5 +74,5 @@ Limitation
 
 ## Internal path
 
-Seahorse uses some routes for its internal needs (<code>_config</code>, <code>_routes</code>)
-Obviously, you can not use these paths for your own needs.
+Seahorse uses a specific route for its internal needs (<code>_config</code>)
+Obviously, you can not use this path for your own needs.

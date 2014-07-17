@@ -1,5 +1,5 @@
-{
-  "routes": [{
+[
+  {
     "httpRequest" : {
         "method" : "post",
         "path" : "/help"
@@ -37,5 +37,5 @@
             "value": 1000
         }
     }
-  }]
-}
+  }
+]
