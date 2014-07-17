@@ -4,8 +4,8 @@
   "description": "Configurable mock REST API testing tool written in javascript ",
   "version": "0.0.1",
   "author": "jtbonhomme@gmail.com",
-  "main": "./lib/seahorse.js",
-  "bin": "./bin/seahorse",
+  "main": "./lib/main.js",
+  "bin": "./bin/seahorse.js",
   "engines": {
     "node": "~>0.10.25",
     "npm": "~>1.3.24"

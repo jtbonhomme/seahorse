@@ -1,7 +1,7 @@
 {
   "routes": [{
     "httpRequest" : {
-        "method" : "POST",
+        "method" : "post",
         "path" : "/help"
     },
     "httpResponse" : {
@@ -22,7 +22,7 @@
   },
   {
     "httpRequest" : {
-        "method" : "GET",
+        "method" : "get",
         "path" : "/help",
         "queryString" : "id=1"
     },

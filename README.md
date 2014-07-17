@@ -33,7 +33,7 @@ Configuration file
 {
   "routes": [{
     "httpRequest" : {
-        "method" : "POST",
+        "method" : "post",
         "path" : "/help"
     },
     "httpResponse" : {
@@ -50,7 +50,7 @@ Configuration file
   },
   {
     "httpRequest" : {
-        "method" : "GET",
+        "method" : "get",
         "path" : "/help",
         "queryString" : "id=1"
     },
@@ -68,3 +68,11 @@ Configuration file
   }]
 }
 ```
+
+Limitation
+==========
+
+## Internal path
+
+Seahorse uses some routes for its internal needs (<code>_config</code>, <code>_routes</code>)
+Obviously, you can not use these paths for your own needs.

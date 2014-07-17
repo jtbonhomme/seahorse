@@ -26,10 +26,14 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'bin/seahorse',
+        script: 'bin/seahorse.js',
         options: {
           args: ["example.json"],
-          nodeArgs: ['--debug']
+          watch: ['bin', 'lib'],
+          verbose: true,
+          env: {
+            DEBUG: 'express:*'
+          }
         }
       }
     },
