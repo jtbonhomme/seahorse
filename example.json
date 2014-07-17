@@ -24,7 +24,10 @@
     "httpRequest" : {
         "method" : "get",
         "path" : "/help",
-        "queryString" : "id=1"
+        "query" : {
+          "id": 1,
+          "format": "json"
+        }
     },
     "httpResponse" : {
         "statusCode" : 200,
