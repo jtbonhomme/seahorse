@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
     concurrent: {
       dev: {
-        tasks: ['nodemon', 'watch'],
+        tasks: ['nodemon', 'watch', 'mochaTest'],
         options: {
           logConcurrentOutput: true
         }
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         script: 'bin/seahorse.js',
         options: {
           args: ["example.json"],
-          watch: ['bin', 'lib'],
+          watch: ['bin', 'lib', 'specs'],
           verbose: true,
           env: {
             DEBUG: 'express:*'
@@ -61,6 +61,15 @@ module.exports = function(grunt) {
       ],
       options: {
       }
+    },
+
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['specs/**/*.js']
+      }
     }
   });
 
@@ -70,9 +79,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
   // Default task(s).
   grunt.registerTask('dev', ['concurrent:dev']);
-  grunt.registerTask('default', ['clean:all', 'jshint']);
+  grunt.registerTask('default', ['clean:all', 'jshint', 'mochaTest']);
 
 };
