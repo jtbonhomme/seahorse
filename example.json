@@ -1,7 +1,7 @@
 [
   {
     "httpRequest" : {
-        "method" : "post",
+        "method" : "delete",
         "path" : "/help"
     },
     "httpResponse" : {
@@ -15,9 +15,46 @@
             "name": "Content-Type",
             "values": ["application/json; charset=utf-8"]
         } ],
-        "delay": {
-            "value": 1
-        }
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "put",
+        "path" : "/help"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"key\": \"value\"}",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "values": ["Content-Type, Authorization"]
+        },
+        {
+            "name": "Content-Type",
+            "values": ["application/json; charset=utf-8"]
+        } ],
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "post",
+        "path" : "/help"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"key\": \"value\"}",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "values": ["Content-Type, Authorization"]
+          },
+          {
+            "name": "Content-Type",
+            "values": ["application/json; charset=utf-8"]
+            }
+        ],
+        "delay": 2000
     }
   },
   {
@@ -35,10 +72,8 @@
         "headers" : [ {
             "name": "Content-Type",
             "values": ["application/json"]
-        } ],
-        "delay": {
-            "value": 1000
-        }
+        }],
+        "delay": 1000
     }
   }
 ]
