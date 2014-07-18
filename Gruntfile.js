@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
     concurrent: {
       dev: {
-        tasks: ['nodemon', 'watch', 'mochaTest'],
+        tasks: ['nodemon', 'watch'],
         options: {
           logConcurrentOutput: true
         }
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: 'spec'
+          reporter: 'dot'
         },
         src: ['specs/**/*.js']
       }
@@ -83,6 +83,7 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('dev', ['concurrent:dev']);
+  grunt.registerTask('test', ['jshint', 'mochaTest']);
   grunt.registerTask('default', ['clean:all', 'jshint', 'mochaTest']);
 
 };
