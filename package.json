@@ -1,6 +1,5 @@
 {
   "name": "seahorse",
-  "private": true,
   "description": "Configurable mock REST API testing tool written in javascript ",
   "version": "0.0.1",
   "author": "jtbonhomme@gmail.com",
