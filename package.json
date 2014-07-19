@@ -16,7 +16,7 @@
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-watch": "~0.6.1",
     "minimist": "0.0.8",
-    "express": "3.x"
+    "express": "~3.14.0"
   },
   "devDependencies": {
     "grunt-concurrent": "~0.5.0",

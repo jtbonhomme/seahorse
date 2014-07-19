@@ -9,11 +9,11 @@
         "body" : "{\"key\": \"value\"}",
         "headers" : [ {
             "name": "Access-Control-Allow-Headers",
-            "values": ["Content-Type, Authorization"]
+            "value": "Content-Type, Authorization"
         },
         {
             "name": "Content-Type",
-            "values": ["application/json; charset=utf-8"]
+            "value": "application/json; charset=utf-8"
         } ],
         "delay": 1
     }
@@ -28,11 +28,11 @@
         "body" : "{\"key\": \"value\"}",
         "headers" : [ {
             "name": "Access-Control-Allow-Headers",
-            "values": ["Content-Type, Authorization"]
+            "value": "Content-Type, Authorization"
         },
         {
             "name": "Content-Type",
-            "values": ["application/json; charset=utf-8"]
+            "value": "application/json; charset=utf-8"
         } ],
         "delay": 1
     }
@@ -47,11 +47,11 @@
         "body" : "{\"key\": \"value\"}",
         "headers" : [ {
             "name": "Access-Control-Allow-Headers",
-            "values": ["Content-Type, Authorization"]
+            "value": "Content-Type, Authorization"
           },
           {
             "name": "Content-Type",
-            "values": ["application/json; charset=utf-8"]
+            "value": "application/json; charset=utf-8"
             }
         ],
         "delay": 2000
@@ -70,8 +70,31 @@
         "statusCode" : 200,
         "file":"/lib/help.txt",
         "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Authorization"
+        },
+        {
             "name": "Content-Type",
-            "values": ["application/json"]
+            "value": "text/plain"
+        } ],
+        "delay": 1000
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "get",
+        "path" : "/help/please"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "file":"/lib/help.txt",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Authorization"
+        },
+        {
+            "name": "Content-Type",
+            "value": "application/octet-stream"
         }],
         "delay": 1000
     }
