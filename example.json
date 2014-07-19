@@ -68,7 +68,7 @@
     },
     "httpResponse" : {
         "statusCode" : 200,
-        "file":"/lib/help.txt",
+        "file":"/Users/jean-thierrybonhomme/Developments/seahorse/lib/help.txt",
         "headers" : [ {
             "name": "Access-Control-Allow-Headers",
             "value": "Content-Type, Authorization"
@@ -77,7 +77,7 @@
             "name": "Content-Type",
             "value": "text/plain"
         } ],
-        "delay": 1000
+        "delay": 2000
     }
   },
   {
@@ -87,7 +87,7 @@
     },
     "httpResponse" : {
         "statusCode" : 200,
-        "file":"/lib/help.txt",
+        "file":"/Users/jean-thierrybonhomme/Developments/seahorse/lib/help.txt",
         "headers" : [ {
             "name": "Access-Control-Allow-Headers",
             "value": "Content-Type, Authorization"
@@ -96,7 +96,7 @@
             "name": "Content-Type",
             "value": "application/octet-stream"
         }],
-        "delay": 1000
+        "delay": 20
     }
   }
 ]
