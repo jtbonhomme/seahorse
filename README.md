@@ -34,79 +34,10 @@ Display help.
 Configuration file format
 =========================
 
-Here is the configuration file schema :
+Read the [configuration file schema](SCHEMA.md) to check the JSON syntax.
 
-```
-{
-  "description" : "Seahorse configuration file JSON Schema",
-  "type" : "array",
-  "items" : {
-    "title" : "Mock API requests and responses definition",
-    "type" : "object",
-    "properties" : {
-      "httpRequest" : {
-        "type" : "object",
-        "optional" : false,
-        "properties" : {
-          "method" :  {
-            "type" : "string",
-            "enum" : ["get", "post", "put", "delete"],
-            "optional" : false
-          },
-          "path" :  {
-            "type" : "string",
-            "optional" : false
-          },
-          "query" :  {
-            "type" : "object",
-            "optional" : true
-          }
-        }
-      },
-      "httpResponse" : {
-        "type" : "object",
-        "optional" : false,
-        "properties" : {
-          "statusCode" :  {
-            "type" : "number",
-            "optional" : true
-          },
-          "body" :  {
-            "type" : "string",
-            "optional" : true
-          },
-          "file" :  {
-            "type" : "string",
-            "format": "url"
-            "optional" : true
-          },
-          "header" :  {
-            "type" : "array",
-            "optional" : true,
-            "items": {
-              "type" : "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "delay" :  {
-            "type" : "number",
-            "optional" : true
-          },
-        }
-      }
-    }
-    "minItems" : 1,
-  }
-```
-
-As an example :
+Example
+-------
 
 ```
 [{
