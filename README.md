@@ -29,6 +29,16 @@ Display help.
 
 ```
 % seahorse config.json -h
+Usage: seahorse <source> [options]
+
+Options:
+  --help    -h          display this text
+  --version -v          output version
+  --port    -p <port>   set port
+
+Examples:
+  seahorse config.json
+  seahorse --port 1234
 ```
 
 Configuration file format
@@ -97,3 +107,17 @@ Update the configuration. If new routes are specified, they will be added, else,
 ```
 % curl -X POST --data '[{"httpResquest":...}]' "http://localhost:3000/_config"
 ```
+
+Test
+====
+
+Launch tests with :
+
+```
+% grunt test
+```
+
+Licence
+=======
+
+This software is provided under [MIT licence](LICENCE.md).
