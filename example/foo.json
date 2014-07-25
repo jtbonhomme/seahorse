@@ -1,0 +1,51 @@
+[
+  {
+    "httpRequest" : {
+        "method" : "get",
+        "path" : "/foo"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"key\": \"value\"}",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "values": ["Content-Type, Authorization"]
+        },
+        {
+            "name": "Content-Type",
+            "values": ["application/json; charset=utf-8"]
+        } ],
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "post",
+        "path" : "/foo"
+    },
+    "httpResponse" : {
+        "statusCode" : 201,
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "put",
+        "path" : "/foo"
+    },
+    "httpResponse" : {
+        "statusCode" : 202,
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "delete",
+        "path" : "/foo"
+    },
+    "httpResponse" : {
+        "statusCode" : 203,
+        "delay": 1
+    }
+  }
+]

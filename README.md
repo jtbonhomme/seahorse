@@ -13,6 +13,9 @@ Install it
 Use it
 ======
 
+As a npm package
+----------------
+
 Start a mock REST API server with no configuration (no route defined) that listen on port 3000 by default.
 
 ```
@@ -41,6 +44,37 @@ Examples:
   seahorse --port 1234
 ```
 
+As a javascript library
+-----------------------
+
+```
+var server   = require('../lib/server');
+
+var config = [
+  {
+    "httpRequest" : {
+        "method" : "get",
+        "path" : "/foo"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"key\": \"value\"}",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "values": ["Content-Type, Authorization"]
+        },
+        {
+            "name": "Content-Type",
+            "values": ["application/json; charset=utf-8"]
+        } ],
+        "delay": 1
+    }
+  }
+];
+
+server.start(config, 3000);
+```
+
 Configuration file format
 =========================
 
@@ -49,6 +83,8 @@ Read the [configuration file schema](SCHEMA.md) to check the JSON syntax.
 Example
 -------
 
+See [example/config.json](example/config.json) :
+ 
 ```
 [{
   "httpRequest" : {
@@ -116,6 +152,11 @@ Launch tests with :
 ```
 % grunt test
 ```
+
+Todo
+====
+
+* Handle cookies
 
 Licence
 =======
