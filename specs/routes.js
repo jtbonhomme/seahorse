@@ -181,7 +181,7 @@ describe('Test updateConfig method of routes module', function() {
     describe('with an incorrect config file', function() {
         it('should returns false', function(done) {
             routes.config = JSON.parse( JSON.stringify( configOk ) );
-            routes.setConfig("foo").should.eql(false);
+            routes.updateConfig("foo").should.eql(false);
             done();
         });
         it('should not modify config property', function(done) {
@@ -192,7 +192,7 @@ describe('Test updateConfig method of routes module', function() {
     describe('with an correct config file but with same method and path', function() {
         it('should returns true', function(done) {
             routes.config = JSON.parse( JSON.stringify( configOk ) );
-            routes.setConfig(updateOkSame).should.eql(true);
+            routes.updateConfig(updateOkSame).should.eql(true);
             done();
         });
         it('should not modify config', function(done) {
@@ -204,7 +204,7 @@ describe('Test updateConfig method of routes module', function() {
     describe('with an correct config file and diffrent method or path', function() {
         it('should returns true', function(done) {
             routes.config = JSON.parse( JSON.stringify( configOk ) );
-            routes.setConfig(updateOkDifferent).should.eql(true);
+            routes.updateConfig(updateOkDifferent).should.eql(true);
             done();
         });
         it('should modify config', function(done) {
