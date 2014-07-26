@@ -1,9 +1,9 @@
 'use strict';
 
 var should   = require('should');
-var routes   = require('../lib/routes').routes;
+var routes   = this.routes;
 
-describe("[server.js] ", function(){
+describe("[routes.js] ", function(){
 
     var configOk = [
       {

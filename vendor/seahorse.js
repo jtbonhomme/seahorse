@@ -1,3 +1,49 @@
+/*! seahorse - v0.0.4 - 2014-07-26 */
+(function(global){
+  'use strict';
+  var help = [
+    "Usage: seahorse <source> [options]",
+    "",
+    "Options:",
+    "  --help    -h          display this text",
+    "  --version -v          output version",
+    "  --port    -p <port>   set port",
+    "",
+    "Examples:",
+    "  seahorse config.json",
+    "  seahorse --port 1234"
+  ].join("\n");
+
+  global.help = help;
+})(this);
+
+(function(global){
+
+  var utils = {
+    _getExtension: function(filename) {
+      var i = filename.lastIndexOf('.');
+      return (i < 0) ? '' : filename.substr(i);
+    },
+  
+    _allowCrossDomain: function(req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+      // intercept OPTIONS method
+      if ('OPTIONS' == req.method) {
+        res.send(200);
+      }
+      else {
+        next();
+      }
+    }
+  };
+
+  global.utils = utils;
+
+})(this);
+
 (function(global){
   'use strict';
   var util      = require('util');
@@ -132,3 +178,108 @@
 
   global.routes  = routes;
 })(this);
+
+(function(global, utils, routes){
+  'use strict';
+
+  var fs      = require('fs');
+  var express = require('express');
+  var util    = require('util');
+  var app     = express();
+  var _server;
+
+  var server = {
+    start: function(config, port) {
+      app.use(utils._allowCrossDomain);
+      app.use(express.json());       // to support JSON-encoded bodies
+      app.use(express.urlencoded()); // to support URL-encoded bodies
+      util.log("start seahorse server on port " + port);
+  
+      // permanent route for current configuration reading
+      app.get("/_config", function(req, res) {
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // route for setting a new configuration (erase the previous one)
+      app.post("/_config", function(req, res) {
+        var newConfig = req.body;
+        routes.setConfig(newConfig, app);
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // route for updating the current configuration (update the previous one with the new keys)
+      app.put("/_config", function(req, res) {
+        var newConfig = req.body;
+        routes.updateConfig(newConfig, app);
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // set initial config
+      if( typeof config !== 'undefined') {
+        routes.setConfig(config, app);
+      }
+  
+      // mock routes
+      app.all("*", function(req, res) {
+        routes.all(req, res);
+      });
+  
+      // start listening
+      _server = app.listen(port);
+    },
+
+    stop: function() {
+      util.log("stop seahorse server");
+      _server.close();
+    }
+  };
+
+  global.server = server;
+})(this, this.utils, this.routes);
+
+(function(global, help, server){
+  'use strict';
+
+  var fs       = require('fs');
+
+  // Output version
+  function version() {
+    var pkg = require('../package.json');
+    console.log(pkg.version);
+  }
+
+  // Output help.txt
+  function usage() {
+    console.log(help);
+  }
+
+  // Load a config file and start server on a given port
+  function load(source, port) {
+    var config;
+
+    // load config file into config object
+    if (/\.json$/.test(source)) {
+      var path = process.cwd() + '/' + source;
+      config   = require(path);
+    }
+    server.start(config, port);
+  }
+
+  // Uses minimist parsed argv in bin/seahorse
+  function run(argv) {
+    // todo: handle more than one json files
+    var source = argv._[0];
+    var port   = argv.port || argv.p;
+
+    if (argv.version || argv.v) return version();
+    if (argv.help    || argv.h) return usage();
+
+    return load(source, (typeof port === "number")?port:3000);
+  }
+
+  global.run = run;
+  global.init = load;
+}(this, this.help, this.server));

@@ -1,10 +1,4 @@
-
 'use strict';
-
-var server   = require('../lib/server');
-var should   = require('should');
-var api      = require('hippie');
-var routes   = require('../lib/routes').routes;
 
 describe("[server.js] ", function(){
   var config = [
@@ -41,8 +35,6 @@ describe("[server.js] ", function(){
       }
     }
   ];
-
-  server.start(null, 3000);
 
   describe('Test get /_config server route', function() {
     beforeEach(function(){
@@ -130,4 +122,4 @@ describe("[server.js] ", function(){
       });
     });
   });
-});  
+});

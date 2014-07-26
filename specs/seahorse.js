@@ -1,10 +1,5 @@
 'use strict';
 
-var should   = require('should');
-var api      = require('hippie');
-var server   = require('../lib/server');
-var routes   = require('../lib/routes').routes;
-
 describe("[seahorse.js] ", function(){
   this.timeout(50);
 
@@ -63,8 +58,6 @@ describe("[seahorse.js] ", function(){
   beforeEach(function(){
     routes.setConfig(config);
   });
-
-  server.start(null, 3000);
 
   describe('Test get /_config server route', function() {
     it('should returns config object', function(done) {
@@ -133,3 +126,4 @@ describe("[seahorse.js] ", function(){
     });
   });
 });
+

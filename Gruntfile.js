@@ -4,15 +4,21 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
 
+    pkg: grunt.file.readJSON('package.json'),
+
     // custom variables configuration
     dirs: {
       lib:     'lib/',
-      test:    'specs/'
+      bin:     'bin/',
+      tmp:     'tmp/',
+      vendor:  'vendor/',
+      specs:   'specs/'
     },
 
     files: {
-      all: '**/*',
-      js:  '**/*.js'
+      all:      '**/*',
+      seahorse: 'seahorse.js',
+      js:       '**/*.js'
     },
 
     concurrent: {
@@ -26,7 +32,7 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'bin/seahorse.js',
+        script: '<%= dirs.bin %><%= files.seahorse %>',
         options: {
           args: ["example.json"],
           watch: ['bin', 'lib', 'specs'],
@@ -41,7 +47,7 @@ module.exports = function(grunt) {
     // contrib-watch plugin configuration.
     watch: {
       jshint: {
-        files: ['<%= dirs.lib %><%= files.js %>', '<%= dirs.test %><%= files.js %>', 'Gruntfile.js'],
+        files: ['<%= dirs.lib %><%= files.js %>', '<%= dirs.specs %><%= files.js %>', 'Gruntfile.js'],
         tasks: 'jshint'
       }
     },
@@ -49,7 +55,10 @@ module.exports = function(grunt) {
     // contrib-clean plugin configuration.
     clean: {
       all: [
-        'public'
+        '<%= dirs.tmp %>',
+        '<%= dirs.vendor %><%= files.js %>'
+      ], tmp: [
+        '<%= dirs.tmp %>'
       ]
     },
 
@@ -57,10 +66,25 @@ module.exports = function(grunt) {
     jshint: {
       files: [
         'Gruntfile.js',
-        'lib/**/*.js'
+        '<%= dirs.lib %><%= files.js %>'
       ],
       options: {
       }
+    },
+
+    concat: {
+      options: {
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
+      },
+      test: {
+        src: ['<%= dirs.lib %>help.js', '<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js', '<%= dirs.specs %>specs.js', '<%= dirs.specs %>routes.js', '<%= dirs.specs %>server.js', '<%= dirs.specs %>seahorse.js'],
+        dest: '<%= dirs.tmp %><%= pkg.name %>.js',
+      },
+      dist: {
+        src: ['<%= dirs.lib %>help.js', '<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js', '<%= dirs.lib %>main.js'],
+        dest: '<%= dirs.vendor %><%= pkg.name %>.js',
+      },
     },
 
     mochaTest: {
@@ -68,7 +92,7 @@ module.exports = function(grunt) {
         options: {
           reporter: 'dot'
         },
-        src: ['specs/**/*.js']
+        src: ['<%= dirs.tmp %>seahorse.js']
       }
     }
   });
@@ -80,10 +104,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
   // Default task(s).
+  grunt.registerTask('build', ['clean:all', 'jshint', 'concat:test', 'mochaTest:test', 'concat:dist']);
   grunt.registerTask('dev', ['concurrent:dev']);
-  grunt.registerTask('test', ['jshint', 'mochaTest']);
-  grunt.registerTask('default', ['clean:all', 'jshint', 'mochaTest']);
+  grunt.registerTask('test', ['clean:tmp', 'jshint', 'concat:test', 'mochaTest:test']);
+  grunt.registerTask('default', ['test']);
 
 };
