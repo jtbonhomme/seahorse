@@ -3,6 +3,7 @@
 
   var fs       = require('fs');
   var help     = require('./help').help;
+  var server   = require('../vendor/seahorse').server;
 
   // Output version
   function version() {

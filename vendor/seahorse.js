@@ -31,7 +31,7 @@
   var util      = require('util');
 
   var routes = {
-  	config: {},
+  	config: [],
 
     checkConfig: function(config) {
       try
@@ -210,12 +210,10 @@
   
       // mock routes
       app.all("*", function(req, res) {
-      util.log("app.all");
         routes.all(req, res);
       });
   
       // start listening
-      util.log("go");
       this._server = app.listen(port);
     },
 
