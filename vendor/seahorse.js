@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.4 - 2014-07-26 */
+/*! seahorse - v0.0.5 - 2014-07-27 */
 (function(global){
 
   var utils = {
@@ -168,9 +168,10 @@
   var express = require('express');
   var util    = require('util');
   var app     = express();
-  var _server;
 
   var server = {
+    _server: null,
+
     start: function(config, port) {
       app.use(utils._allowCrossDomain);
       app.use(express.json());       // to support JSON-encoded bodies
@@ -215,13 +216,13 @@
   
       // start listening
       util.log("go");
-      _server = app.listen(port);
+      this._server = app.listen(port);
     },
 
     stop: function() {
-      if( typeof _server !== 'undefined') {
+      if( this._server !== null ) {
         util.log("stop seahorse server");
-        _server.close();      
+        this._server.close();      
       }
     }
   };
