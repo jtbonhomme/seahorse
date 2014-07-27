@@ -78,11 +78,11 @@ module.exports = function(grunt) {
           '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
       },
       test: {
-        src: ['<%= dirs.lib %>help.js', '<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js', '<%= dirs.specs %>specs.js', '<%= dirs.specs %>routes.js', '<%= dirs.specs %>server.js', '<%= dirs.specs %>seahorse.js'],
+        src: ['<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js', '<%= dirs.specs %>specs.js', '<%= dirs.specs %>routes.js', '<%= dirs.specs %>server.js', '<%= dirs.specs %>seahorse.js'],
         dest: '<%= dirs.tmp %><%= pkg.name %>.js',
       },
       dist: {
-        src: ['<%= dirs.lib %>help.js', '<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js', '<%= dirs.lib %>main.js'],
+        src: ['<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js'],
         dest: '<%= dirs.vendor %><%= pkg.name %>.js',
       },
     },

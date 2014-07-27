@@ -1,23 +1,5 @@
 /*! seahorse - v0.0.4 - 2014-07-26 */
 (function(global){
-  'use strict';
-  var help = [
-    "Usage: seahorse <source> [options]",
-    "",
-    "Options:",
-    "  --help    -h          display this text",
-    "  --version -v          output version",
-    "  --port    -p <port>   set port",
-    "",
-    "Examples:",
-    "  seahorse config.json",
-    "  seahorse --port 1234"
-  ].join("\n");
-
-  global.help = help;
-})(this);
-
-(function(global){
 
   var utils = {
     _getExtension: function(filename) {
@@ -221,65 +203,28 @@
       if( typeof config !== 'undefined') {
         routes.setConfig(config, app);
       }
+      else {
+        throw "initial config is undefined";
+      }
   
       // mock routes
       app.all("*", function(req, res) {
+      util.log("app.all");
         routes.all(req, res);
       });
   
       // start listening
+      util.log("go");
       _server = app.listen(port);
     },
 
     stop: function() {
-      util.log("stop seahorse server");
-      _server.close();
+      if( typeof _server !== 'undefined') {
+        util.log("stop seahorse server");
+        _server.close();      
+      }
     }
   };
 
   global.server = server;
 })(this, this.utils, this.routes);
-
-(function(global, help, server){
-  'use strict';
-
-  var fs       = require('fs');
-
-  // Output version
-  function version() {
-    var pkg = require('../package.json');
-    console.log(pkg.version);
-  }
-
-  // Output help.txt
-  function usage() {
-    console.log(help);
-  }
-
-  // Load a config file and start server on a given port
-  function load(source, port) {
-    var config;
-
-    // load config file into config object
-    if (/\.json$/.test(source)) {
-      var path = process.cwd() + '/' + source;
-      config   = require(path);
-    }
-    server.start(config, port);
-  }
-
-  // Uses minimist parsed argv in bin/seahorse
-  function run(argv) {
-    // todo: handle more than one json files
-    var source = argv._[0];
-    var port   = argv.port || argv.p;
-
-    if (argv.version || argv.v) return version();
-    if (argv.help    || argv.h) return usage();
-
-    return load(source, (typeof port === "number")?port:3000);
-  }
-
-  global.run = run;
-  global.init = load;
-}(this, this.help, this.server));
