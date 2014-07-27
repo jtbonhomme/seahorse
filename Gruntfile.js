@@ -87,6 +87,18 @@ module.exports = function(grunt) {
       },
     },
 
+    uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
+      },
+      dist: {
+        files: {
+          '<%= dirs.vendor %><%= pkg.name %>.min.js': ['<%= dirs.lib %>utils.js', '<%= dirs.lib %>routes.js', '<%= dirs.lib %>server.js']
+        }
+      }
+    },
+
     mochaTest: {
       test: {
         options: {
@@ -97,7 +109,7 @@ module.exports = function(grunt) {
     }
   });
 
-  // Load the plugin that provides the tasks.
+  // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -106,9 +118,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('build', ['clean:all', 'jshint', 'concat:test', 'mochaTest:test', 'concat:dist']);
+  grunt.registerTask('build', ['clean:all', 'jshint', 'concat:test', 'mochaTest:test', 'concat:dist', 'uglify:dist']);
   grunt.registerTask('dev', ['concurrent:dev']);
   grunt.registerTask('test', ['clean:tmp', 'jshint', 'concat:test', 'mochaTest:test']);
   grunt.registerTask('default', ['test']);

@@ -3,6 +3,8 @@ seahorse
 
 Seahorse is a configurable mock REST API. I may be used for testing and it is written in javascript.
 
+Last version is 0.0.5.
+
 Install it
 ==========
 
@@ -48,7 +50,7 @@ As a javascript library
 -----------------------
 
 ```
-var server   = require('../lib/server');
+var server   = require('../vendor/seahorse.min').server;
 
 var config = [
   {
@@ -74,6 +76,8 @@ var config = [
 
 server.start(config, 3000);
 ```
+
+See [example/example.js](example/example.js) for a  very simple use of the lib.
 
 Configuration file format
 =========================
@@ -152,6 +156,20 @@ Launch tests with :
 ```
 % grunt test
 ```
+
+Thanks
+======
+
+This project uses these third packages:
+
+* [express](http://expressjs.com/)
+* [hippie](https://github.com/vesln/hippie)
+* [grunt-mocha-test](https://github.com/pghalliday/grunt-mocha-test)
+* [should](visionmedia/should.js)
+* [grunt-nodemon](https://github.com/ChrisWren/grunt-nodemon)
+* [minimist](substack/minimist)
+
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 Todo
 ====

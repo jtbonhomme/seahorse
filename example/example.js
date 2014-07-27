@@ -1,6 +1,6 @@
 'use strict';
 
-var server   = require('../vendor/seahorse').server;
+var server   = require('../vendor/seahorse.min').server;
 var api      = require('hippie');
 
 var config   = require('./foo.json');
@@ -12,8 +12,8 @@ api()
 .base('http://localhost:1234')
 .get('/foo')
 .expectStatus(200)
-//.expectHeader('Content-Type', 'application/json; charset=utf-8')
-//.expectBody({"key": "value"})
+.expectHeader('Content-Type', 'application/json; charset=utf-8')
+.expectBody({"key": "value"})
 .end(function(err, res, body) {
   if (err) {
     console.log("something got wrong : " + err.toString());
