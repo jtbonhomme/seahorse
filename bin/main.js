@@ -1,9 +1,8 @@
-(function(global, server){
+(function(global){
   'use strict';
 
-  var fs       = require('fs');
-  var help     = require('./help').help;
-  var server   = require('../vendor/seahorse').server;
+  var help      = require('./help').help;
+  var server    = require('../vendor/seahorse').server;
 
   // Output version
   function version() {
@@ -42,4 +41,4 @@
 
   global.run = run;
   global.init = load;
-}(this, this.server));
+}(this));

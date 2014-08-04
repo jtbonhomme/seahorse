@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     dirs: {
       lib:     'lib/',
       bin:     'bin/',
+      example: 'example/',
       tmp:     'tmp/',
       vendor:  'vendor/',
       specs:   'specs/'
@@ -34,7 +35,7 @@ module.exports = function(grunt) {
       dev: {
         script: '<%= dirs.bin %><%= files.seahorse %>',
         options: {
-          args: ["example.json"],
+          args: ['<%= dirs.example %>config.json'],
           watch: ['bin', 'lib', 'specs'],
           verbose: true,
           env: {
@@ -48,7 +49,7 @@ module.exports = function(grunt) {
     watch: {
       jshint: {
         files: ['<%= dirs.lib %><%= files.js %>', '<%= dirs.specs %><%= files.js %>', 'Gruntfile.js'],
-        tasks: 'jshint'
+        tasks: ['jshint', 'concat:dist']
       }
     },
 

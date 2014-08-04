@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/jtbonhomme/seahorse.git"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "jtbonhomme@gmail.com",
   "main": "./lib/main.js",
   "bin": "./bin/seahorse.js",
@@ -23,11 +23,14 @@
   },
   "devDependencies": {
     "grunt-concurrent": "~0.5.0",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-contrib-uglify": "~0.5.1",
     "grunt-mocha-test": "^0.11.0",
     "grunt-nodemon": "~0.3.0",
-    "should": "^4.0.4",
     "hippie": "~0.3.0",
-    "grunt-contrib-concat": "~0.5.0",
-    "grunt-contrib-uglify": "~0.5.1"
+    "install": "^0.1.7",
+    "npm": "^1.4.23",
+    "should": "^4.0.4",
+    "throttle": "^1.0.3"
   }
 }
