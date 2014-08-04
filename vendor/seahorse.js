@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.5 - 2014-07-27 */
+/*! seahorse - v0.0.5 - 2014-08-04 */
 (function(global){
 
   var utils = {
@@ -172,8 +172,18 @@
   var server = {
     _server: null,
 
+    // todo: move this middleware in utils
+    _limit: function(root) {
+      return function staticMiddleware(req, res, next) {
+        if ('GET' != req.method && 'HEAD' != req.method) return next();
+        var stream = fs.createReadStream(root + req.originalUrl);
+        stream.pipe(res);
+      };
+    },
+
     start: function(config, port) {
       app.use(utils._allowCrossDomain);
+      app.use('/example', this._limit('/Users/jean-thierrybonhomme/Development/seahorse'));
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
       util.log("start seahorse server on port " + port);
