@@ -83,6 +83,25 @@
   {
     "httpRequest" : {
         "method" : "get",
+        "path" : "regexp:^\/foo\/.*[.]json$"
+    },
+    "httpResponse" : {
+        "statusCode" : 200,
+        "body" : "{\"foo\": \"bar.json\"}",
+        "headers" : [ {
+            "name": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Authorization"
+        },
+        {
+            "name": "Content-Type",
+            "value": "application/json; charset=utf-8"
+        } ],
+        "delay": 1
+    }
+  },
+  {
+    "httpRequest" : {
+        "method" : "get",
         "path" : "/help/please"
     },
     "httpResponse" : {

@@ -82,7 +82,43 @@ See [example/example.js](example/example.js) for a  very simple use of the lib.
 Configuration file format
 =========================
 
+The configuration file contains an array of route objects.
+Every route object is built with two keys: httpRequest witch make seahorse check if a request matches with this route, and httpResponse that gives seahorse the appropriate response to send in case the request matches the route.
+
 Read the [configuration file schema](SCHEMA.md) to check the JSON syntax.
+
+httpRequest key
+---------------
+
+The httpRequest key has a value that is an object that shall contains two keys: method (get, post, put or delete) and path.
+The path key may be either a simple string ("path": "/foo/api.json") or a regexp. 
+To use regexp as route path, you shall prefix the regexp with a string "regexp:" ("path" : "regexp:^\/foo\/.*\.json$")
+The previous example will match <code>/foo/bar.json</code> and <code>/foo/bar/bas.json</code> but will not match <code>/foo.json</code> neither <code>foo/bar.jsonx</code>
+
+In addition, query parameters may be specified. The query key is an object in witch each key is a parameter with its value.
+
+For example, the following httpRequest object : 
+
+```
+httpRequest: {
+  method: "get",
+  path: "/foo",
+  query: {
+    "name": "john"
+  }
+}
+```
+
+Will math <code>GET /foo?name=john</code>, but will not match <code>GET /foo</code>, <code>GET /foo?name=jack</code>, <code>GET /bar?name=john</code> or <code>POST /foo?name=john</code>
+
+httpResponse key
+----------------
+
+The httpResponse is an object that specify, if the request matches the httpRequest object:
+* the status code to be sent in the response, 
+* the body or file to be sent in the payload, 
+* optionnaly, the headers to be added to the response, 
+* and, optionnaly, a delay that will simulate server latency.
 
 Example
 -------
@@ -165,9 +201,10 @@ This project uses these third packages:
 * [express](http://expressjs.com/)
 * [hippie](https://github.com/vesln/hippie)
 * [grunt-mocha-test](https://github.com/pghalliday/grunt-mocha-test)
-* [should](visionmedia/should.js)
+* [should](https://github.com/visionmedia/should.js)
 * [grunt-nodemon](https://github.com/ChrisWren/grunt-nodemon)
-* [minimist](substack/minimist)
+* [minimist](https://github.com/substack/minimist)
+* [node-throttle](https://github.com/TooTallNate/node-throttle)
 
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 

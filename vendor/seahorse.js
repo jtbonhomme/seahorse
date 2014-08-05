@@ -1,3 +1,58 @@
+/*! seahorse - v0.0.6 - 2014-08-05 */
+(function(global){
+  'use strict';
+
+  var fs         = require('fs');
+  var Throttle   = require('throttle');
+
+  var utils = {
+    _getExtension: function(filename) {
+      var i = filename.lastIndexOf('.');
+      return (i < 0) ? '' : filename.substr(i);
+    },
+  
+    /* todo: 
+     *   - make limit beeing used for static file download only
+     *   - move this middleware in a dedicated npm package
+     */
+    _limit: function(root) {
+      return function staticMiddleware(req, res, next) {
+        if ('GET' != req.method && 'HEAD' != req.method) return next();
+        
+        var stream = fs.createReadStream(root + req.originalUrl);
+        var th = new Throttle(1024*300);
+
+        stream.on('open', function() {
+          // automaticaly pipes readable stream to res (= writeableStream), data are then transfered
+          // with a limited rate through the throttle
+          stream.pipe(th).pipe(res);
+        });
+        stream.on('error', function(err) {
+          console.log('error from reading stream ' + err.toString());
+          res.end(err);
+        });
+      };
+    },
+
+    _allowCrossDomain: function(req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+      // intercept OPTIONS method
+      if ('OPTIONS' == req.method) {
+        res.send(200);
+      }
+      else {
+        next();
+      }
+    }
+  };
+
+  global.utils = utils;
+
+})(this);
+
 (function(global){
   'use strict';
   var util      = require('util');
@@ -145,3 +200,73 @@
 
   global.routes  = routes;
 })(this);
+
+(function(global, utils, routes){
+  'use strict';
+
+  var express = require('express');
+  var util    = require('util');
+  var app     = express();
+
+  var server = {
+    _server: null,
+
+    start: function(config, port) {
+      app.use(utils._allowCrossDomain);
+      /* todo :
+       *   - make limit path and root directory beeing configurable through seahorse rest api
+       */ 
+      app.use('/example', utils._limit('/Users/jbonhomm/Documents/Developpements/seahorse'));
+      app.use(express.json());       // to support JSON-encoded bodies
+      app.use(express.urlencoded()); // to support URL-encoded bodies
+      util.log("start seahorse server on port " + port);
+  
+      // permanent route for current configuration reading
+      app.get("/_config", function(req, res) {
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // route for setting a new configuration (erase the previous one)
+      app.post("/_config", function(req, res) {
+        var newConfig = req.body;
+        routes.setConfig(newConfig, app);
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // route for updating the current configuration (update the previous one with the new keys)
+      app.put("/_config", function(req, res) {
+        var newConfig = req.body;
+        routes.updateConfig(newConfig, app);
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify(routes.getConfig()), 200);
+      });
+  
+      // set initial config
+      if( typeof config !== 'undefined') {
+        routes.setConfig(config, app);
+      }
+      else {
+        throw "initial config is undefined";
+      }
+  
+      // mock routes
+      app.all("*", function(req, res) {
+        routes.all(req, res);
+      });
+  
+      // start listening
+      this._server = app.listen(port);
+    },
+
+    stop: function() {
+      if( this._server !== null ) {
+        util.log("stop seahorse server");
+        this._server.close();      
+      }
+    }
+  };
+
+  global.server = server;
+})(this, this.utils, this.routes);
