@@ -2,7 +2,9 @@
 logs
 *.log
 tmp
+# big files for tests
 example/*.mov
+example/*.avi
 
 # Runtime data
 pids

@@ -3,8 +3,6 @@ seahorse
 
 Seahorse is a configurable mock REST API. I may be used for testing and it is written in javascript.
 
-Last version is 0.0.5.
-
 Install it
 ==========
 
@@ -91,8 +89,8 @@ httpRequest key
 ---------------
 
 The httpRequest key has a value that is an object that shall contains two keys: method (get, post, put or delete) and path.
-The path key may be either a simple string ("path": "/foo/api.json") or a regexp. 
-To use regexp as route path, you shall prefix the regexp with a string "regexp:" ("path" : "regexp:^\/foo\/.*\.json$")
+The path key may be either a simple string (<code>"path": "/foo/api.json"</code>) or a regexp. 
+To use regexp as route path, you shall prefix the regexp with a string <code>"regexp:"</code> (<code>"path" : "regexp:^\/foo\/.*\.json$"</code>)
 The previous example will match <code>/foo/bar.json</code> and <code>/foo/bar/bas.json</code> but will not match <code>/foo.json</code> neither <code>foo/bar.jsonx</code>
 
 In addition, query parameters may be specified. The query key is an object in witch each key is a parameter with its value.
@@ -115,10 +113,14 @@ httpResponse key
 ----------------
 
 The httpResponse is an object that specify, if the request matches the httpRequest object:
-* the status code to be sent in the response, 
-* the body or file to be sent in the payload, 
-* optionnaly, the headers to be added to the response, 
-* and, optionnaly, a delay that will simulate server latency.
+* the status code to be sent in the response with the key <code>statusCode</code>, 
+* the payload can be specified with one of these keys
+    * <code>body</code>   : object to be returned in the response payload,
+    * <code>file</code>   : path of a static local file to be returned in the response payload, 
+    * <code>static</code> : local root path to search for resources to be returned in the response payload (for example, if path equals <code>/foo/bar.txt</code> and static equals <code>/home/jtbonhomme/seahorse/static</code>, the seahorse will serve the file <code>/home/jtbonhomme/seahorse/static/foo/bar.txt</code>) 
+* optionnaly, in case of static file shall be served (use of <code>file</code> or <code>static</code>), you can specify a maximum <code>bandwidth</code> (in bytes per seconds) to serve the file.
+* optionnaly, some <code>headers</code> to be added to the response, 
+* and, optionnaly, a <code>delay</code> that will simulate server latency can be added.
 
 Example
 -------
