@@ -1,11 +1,14 @@
-/*! seahorse - v0.0.6 - 2014-08-06 */
+/*! seahorse - v0.0.7 - 2014-08-09 */
 (function(global){
   'use strict';
 
   var fs         = require('fs');
   var Throttle   = require('throttle');
+  var util       = require('util');
 
   var utils = {
+    _debug : false,
+
     _getExtension: function(filename) {
       var i = filename.lastIndexOf('.');
       return (i < 0) ? '' : filename.substr(i);
@@ -16,10 +19,26 @@
       var th = new Throttle(rate);
 
       stream.on('open', function() {
+        if( utils._debug ) {
+          util.log('open ' + filename);
+        }
         // automaticaly pipes readable stream to res (= writeableStream), data are then transfered
         // with a limited rate through the throttle
         stream.pipe(th).pipe(res);
       });
+
+      stream.on('data', function(chunk) {
+        if( utils._debug ) {
+          util.log('read a chunk  :' + chunk.length + ' bytes');
+        }
+      });
+
+      stream.on('close', function(chunk) {
+        if( utils._debug ) {
+          util.log('closed ' + filename);
+        }
+      });
+
       stream.on('error', function(err) {
         console.log('error from reading stream ' + err.toString());
         res.end(err);
@@ -269,6 +288,9 @@
   
       // mock routes
       app.all("*", function(req, res) {
+        if( utils._debug ) {
+          util.log('request ' + req.method + ' ' + req.originalUrl);
+        }
         routes.all(req, res);
       });
   
@@ -276,6 +298,7 @@
       this._server = app.listen(port);
     },
 
+    // never used ... todo: add SIGINT listener to properly close the server
     stop: function() {
       if( this._server !== null ) {
         util.log("stop seahorse server");
