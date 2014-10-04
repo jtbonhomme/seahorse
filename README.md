@@ -1,3 +1,5 @@
+![](https://github.com/jtbonhomme/seahorse/raw/dev/assets/icon_50121.png)
+
 seahorse
 ========
 
@@ -209,6 +211,8 @@ This project uses these third packages:
 * [node-throttle](https://github.com/TooTallNate/node-throttle)
 
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
+The seahorse logo was design by [Les vieux garcons](http://www.thenounproject.com/enrique427).
 
 Todo
 ====
