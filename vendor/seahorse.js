@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.6 - 2014-10-12 */
+/*! seahorse - v0.0.7 - 2014-10-12 */
 (function(global){
   'use strict';
 
@@ -223,7 +223,28 @@
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
       util.log("start seahorse server on port" + (logs?" with logs ":" ") + port);
-  
+
+      app.get("/stream", function(req, res) {
+        req.socket.setTimeout(Infinity);
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive'
+        });
+        res.write('\n');
+      });
+
+
+      app.post('/stream/:event_name', function(req, res) {
+        var data = req.body;
+        var id   = (new Date()).toLocaleTimeString();
+
+        res.write('id: ' + id + '\n');
+        res.write("event: " + req.params.event_name + '\n');
+        res.write("data: " + data + '\n\n'); // extra newline is not an error
+        res.end();
+      });
+
       // permanent route for current configuration reading
       app.get("/_config", function(req, res) {
         res.setHeader("Content-Type", "application/json; charset=utf-8");
