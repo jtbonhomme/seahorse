@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.6 - 2014-08-05 */
+/*! seahorse - v0.0.6 - 2014-10-12 */
 (function(global){
   'use strict';
 
@@ -205,21 +205,24 @@
   'use strict';
 
   var express = require('express');
+  var morgan  = require('morgan');
   var util    = require('util');
   var app     = express();
 
   var server = {
     _server: null,
 
-    start: function(config, port) {
+    start: function(config, port, logs) {
       app.use(utils._allowCrossDomain);
+      if( logs ) app.use(morgan('combined'));
+
       /* todo :
        *   - make limit path and root directory beeing configurable through seahorse rest api
        */ 
       app.use('/example', utils._limit('/Users/jbonhomm/Documents/Developpements/seahorse'));
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
-      util.log("start seahorse server on port " + port);
+      util.log("start seahorse server on port" + (logs?" with logs ":" ") + port);
   
       // permanent route for current configuration reading
       app.get("/_config", function(req, res) {
