@@ -6,7 +6,7 @@
     "Options:",
     "  --help    -h          display this text",
     "  --version -v          output version",
-    "  --logs -l             activate logs",
+    "  --logs    -l          activate logs",
     "  --port    -p <port>   set port",
     "",
     "Examples:",
