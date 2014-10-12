@@ -39,6 +39,7 @@ Usage: seahorse <source> [options]
 Options:
   --help    -h          display this text
   --version -v          output version
+  --logs    -l          activate logs
   --port    -p <port>   set port
 
 Examples:
@@ -187,6 +188,14 @@ Update the configuration. If new routes are specified, they will be added, else,
 ```
 % curl -X POST --data '[{"httpResquest":...}]' "http://localhost:3000/_config"
 ```
+
+## get /stream
+
+A SSE functionnality is available on route <code>get /stream</code>. 
+
+## post /stream/:event_name
+
+Any event can be fired to all listeners with the route <code>post /stream/:event_name</code>
 
 Test
 ====

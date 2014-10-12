@@ -18,14 +18,14 @@
   }
 
   // Load a config file and start server on a given port
-  function load(source, port) {
+  function load(source, port, logs) {
     var config = [];
 
     // load config file into config object
     if (/\.json$/.test(source)) {
       //var path = process.cwd() + '/' + source;
       config   = require(source);
-      server.start(config, port);
+      server.start(config, port, logs);
     }
     else {
       throw "source file has not a json extension";
@@ -37,12 +37,14 @@
     // todo: handle more than one json files
     var source = argv._[0];
     var port   = argv.port || argv.p;
+    var logs   = false;
 
     if (argv.trace   || argv.t) utils._debug = true;
+    if (argv.logs    || argv.l) logs = true;
     if (argv.version || argv.v) return version();
     if (argv.help    || argv.h) return usage();
 
-    return load(source, (typeof port === "number")?port:3000);
+    return load(source, (typeof port === "number")?port:3000, logs);
   }
 
   global.run = run;
