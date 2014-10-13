@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.8 - 2014-10-12 */
+/*! seahorse - v0.0.8 - 2014-10-13 */
 (function(global){
   'use strict';
 
@@ -145,7 +145,6 @@
     },
 
     _matchPath: function(element, req) {
-
       if (  element.httpRequest.method.toUpperCase() !== req.method.toUpperCase() )
         return false;
 
@@ -173,6 +172,8 @@
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
             for (var queryKey in element.httpRequest.query ) {
+              console.log("element.query : " + JSON.stringify(element.httpRequest.query));
+              console.log("req.query     : " + JSON.stringify(req.query));
               if( typeof req.query[queryKey] === 'undefined' ||
                 element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;

@@ -23,8 +23,9 @@
 
     // load config file into config object
     if (/\.json$/.test(source)) {
-      //var path = process.cwd() + '/' + source;
-      config   = require(source);
+      var path = process.cwd() + '/' + source;
+      config   = require(path);
+      //config   = require(source);
       server.start(config, port, logs);
     }
     else {
