@@ -16,11 +16,11 @@ describe("[routes.js] ", function(){
             "body" : "{\"key\": \"value\"}",
             "headers" : [ {
                 "name": "Access-Control-Allow-Headers",
-                "values": ["Content-Type, Authorization"]
+                "value": "Content-Type, Authorization"
             },
             {
                 "name": "Content-Type",
-                "values": ["application/json; charset=utf-8"]
+                "value": "application/json; charset=utf-8"
             } ],
             "delay": 1
         }
@@ -38,11 +38,11 @@ describe("[routes.js] ", function(){
             "body" : "{\"key\": \"value\"}",
             "headers" : [ {
                 "name": "Access-Control-Allow-Headers",
-                "values": ["Content-Type, Authorization"]
+                "value": "Content-Type, Authorization"
             },
             {
                 "name": "Content-Type",
-                "values": ["application/json; charset=utf-8"]
+                "value": "application/json; charset=utf-8"
             } ],
             "delay": 1
         }
@@ -61,11 +61,11 @@ describe("[routes.js] ", function(){
             "body" : "{\"key\": \"value\"}",
             "headers" : [ {
                 "name": "Access-Control-Allow-Headers",
-                "values": ["Content-Type, Authorization"]
+                "value": "Content-Type, Authorization"
             },
             {
                 "name": "Content-Type",
-                "values": ["application/json; charset=utf-8"]
+                "value": "application/json; charset=utf-8"
             } ],
             "delay": 1
         }

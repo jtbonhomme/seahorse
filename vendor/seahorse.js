@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.8 - 2014-10-13 */
+/*! seahorse - v0.0.8 - 2014-10-15 */
 (function(global){
   'use strict';
 
@@ -145,18 +145,27 @@
     },
 
     _matchPath: function(element, req) {
-      if (  element.httpRequest.method.toUpperCase() !== req.method.toUpperCase() )
+      util.log(">>>> match ? " + req.params[0] + " vs " + element.httpRequest.path);
+      util.log(">>>> match ? " + req.method.toUpperCase() + " vs " + element.httpRequest.method.toUpperCase());
+      if (  element.httpRequest.method.toUpperCase() !== req.method.toUpperCase() ) {
+        util.log(">>>> NO, methods differ");
         return false;
+      }
 
       if (/^regexp:/.test(element.httpRequest.path)) {
         var r = new RegExp(element.httpRequest.path.split(":")[1]);
-        if( r.test(req.params[0]) !== true )
+        if( r.test(req.params[0]) !== true ) {
+          util.log(">>>> NO, regex not fullfiled");
           return false;
+        }
       }
       else {
-        if( element.httpRequest.path  !== req.params[0] )
+        if( element.httpRequest.path  !== req.params[0] ) {
+                  util.log(">>>> NO, path differ");
           return false;
+        }
       }
+        util.log(">>>> YES");
 
     	return true;
     },
@@ -172,8 +181,6 @@
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
             for (var queryKey in element.httpRequest.query ) {
-              console.log("element.query : " + JSON.stringify(element.httpRequest.query));
-              console.log("req.query     : " + JSON.stringify(req.query));
               if( typeof req.query[queryKey] === 'undefined' ||
                 element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;
@@ -190,11 +197,13 @@
 
       if( match ) {
         setTimeout(function() {
+          util.log(">>>> match");
           // get headers
           if( typeof matchingResponse.httpResponse.headers !== 'undefined' ) {
-            matchingResponse.httpResponse.headers.forEach(function(element, index, array) {
-              res.setHeader(element.name, element.values);
-            });
+              matchingResponse.httpResponse.headers.forEach(function(element, index, array) {
+                if( element.name && element.value )
+                  res.setHeader(element.name, element.value);              
+              });
           }
           // set status code
           if( typeof matchingResponse.httpResponse.statusCode !== 'undefined' ) {
@@ -206,8 +215,10 @@
 
           if( typeof matchingResponse.httpResponse.body !== 'undefined') {
             res.send(matchingResponse.httpResponse.body);
+              util.log(">>>> send body");
           }
           else {
+            util.log(">>>> send a file ?");
             var filename,
                 rate = matchingResponse.httpResponse.bandwidth;
 
@@ -225,8 +236,10 @@
               else {
                 res.sendfile(filename);
               }
+              util.log(">>>> send " + filename);
             }
             else {
+              util.log(">>>> send nothing");
               res.send("");
             }
           }
@@ -259,6 +272,8 @@
       if( logs ) app.use(morgan('combined'));
       util.log("start seahorse server on port" + (logs?" with logs ":" ") + port);
 
+      var sseClients = [];
+
       app.get("/stream", function(req, res) {
         req.socket.setTimeout(Infinity);
         res.writeHead(200, {
@@ -266,6 +281,9 @@
           'Cache-Control': 'no-cache',
           'Connection': 'keep-alive'
         });
+        // todo, do not add same client multiple times
+        sseClients.push(res);
+        util.log("[SSE] new client registered");
         res.write('\n');
       });
 
@@ -274,10 +292,14 @@
         var data = req.body;
         var id   = (new Date()).toLocaleTimeString();
 
-        res.write('id: ' + id + '\n');
-        res.write("event: " + req.params.event_name + '\n');
-        res.write("data: " + data + '\n\n'); // extra newline is not an error
-        res.end();
+        sseClients.forEach(function(element, index, array) {
+          element.write('id: ' + id + '\n');
+          element.write("event: " + req.params.event_name + '\n');
+          // extra newline is not an error
+          element.write("data: " + data + '\n\n');
+          //element.end();
+        });
+        res.send(200);
       });
 
       // permanent route for current configuration reading

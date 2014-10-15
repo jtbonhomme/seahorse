@@ -12,14 +12,16 @@ describe("[seahorse.js] ", function(){
       "httpResponse" : {
           "statusCode" : 200,
           "body" : "{\"key\": \"value\"}",
-          "headers" : [ {
-              "name": "Access-Control-Allow-Headers",
-              "values": ["Content-Type, Authorization"]
-          },
-          {
-              "name": "Content-Type",
-              "values": ["application/json; charset=utf-8"]
-          } ],
+          "headers" : [ 
+            {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type, Authorization"
+            },
+            {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+            }
+          ],
           "delay": 1
       }
     },
