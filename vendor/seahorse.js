@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.8 - 2014-10-15 */
+/*! seahorse - v0.0.8 - 2014-10-16 */
 (function(global){
   'use strict';
 
@@ -88,10 +88,11 @@
           if (typeof element.httpResponse.statusCode === 'undefined') {
             throw "["+index+"] statusCode is missing in httpResponse key";
           }
-          if ( (element.httpRequest.method.toUpperCase() === 'GET' ) && 
-               (typeof element.httpResponse.body === 'undefined')    && 
-               (typeof element.httpResponse.file === 'undefined')    && 
-               (typeof element.httpResponse.static === 'undefined') ) {
+          if ( ( element.httpRequest.method.toUpperCase() === 'GET' )  && 
+               ( element.httpResponse.statusCode != 404             )  &&
+               ( typeof element.httpResponse.body   === 'undefined' )  && 
+               ( typeof element.httpResponse.file   === 'undefined' )  && 
+               ( typeof element.httpResponse.static === 'undefined' ) ) {
             throw "["+index+"] body, file or static are missing in httpResponse key (GET "+element.httpRequest.path+")";
           }          
         });
@@ -145,28 +146,21 @@
     },
 
     _matchPath: function(element, req) {
-      util.log(">>>> match ? " + req.params[0] + " vs " + element.httpRequest.path);
-      util.log(">>>> match ? " + req.method.toUpperCase() + " vs " + element.httpRequest.method.toUpperCase());
       if (  element.httpRequest.method.toUpperCase() !== req.method.toUpperCase() ) {
-        util.log(">>>> NO, methods differ");
         return false;
       }
 
       if (/^regexp:/.test(element.httpRequest.path)) {
         var r = new RegExp(element.httpRequest.path.split(":")[1]);
         if( r.test(req.params[0]) !== true ) {
-          util.log(">>>> NO, regex not fullfiled");
           return false;
         }
       }
       else {
         if( element.httpRequest.path  !== req.params[0] ) {
-                  util.log(">>>> NO, path differ");
           return false;
         }
       }
-        util.log(">>>> YES");
-
     	return true;
     },
 
@@ -197,12 +191,12 @@
 
       if( match ) {
         setTimeout(function() {
-          util.log(">>>> match");
           // get headers
           if( typeof matchingResponse.httpResponse.headers !== 'undefined' ) {
               matchingResponse.httpResponse.headers.forEach(function(element, index, array) {
-                if( element.name && element.value )
+                if( element.name && element.value ) {
                   res.setHeader(element.name, element.value);              
+                }
               });
           }
           // set status code
@@ -210,15 +204,14 @@
             res.status(matchingResponse.httpResponse.statusCode);
           }
           else {
+            // is this branch really usefull ?
             res.status(200);
           }
 
           if( typeof matchingResponse.httpResponse.body !== 'undefined') {
             res.send(matchingResponse.httpResponse.body);
-              util.log(">>>> send body");
           }
           else {
-            util.log(">>>> send a file ?");
             var filename,
                 rate = matchingResponse.httpResponse.bandwidth;
 
@@ -236,10 +229,8 @@
               else {
                 res.sendfile(filename);
               }
-              util.log(">>>> send " + filename);
             }
             else {
-              util.log(">>>> send nothing");
               res.send("");
             }
           }
@@ -287,7 +278,6 @@
         res.write('\n');
       });
 
-
       app.post('/stream/:event_name', function(req, res) {
         var data = req.body;
         var id   = (new Date()).toLocaleTimeString();
@@ -297,7 +287,6 @@
           element.write("event: " + req.params.event_name + '\n');
           // extra newline is not an error
           element.write("data: " + data + '\n\n');
-          //element.end();
         });
         res.send(200);
       });
