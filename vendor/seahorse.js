@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.9 - 2014-10-19 */
+/*! seahorse - v0.0.10 - 2014-10-23 */
 (function(global){
   'use strict';
 
@@ -99,7 +99,9 @@
       }
       catch(e)
       {
-        util.log("error: input file is not a valid json config file, " + e);
+        if( utils._debug ) {
+            util.log("error: input file is not a valid json config file, " + e);
+        }
         return false;
       }
       return true;
@@ -174,13 +176,7 @@
 
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
-            console.log("[debug] parse all query hashes in config : " + JSON.stringify(element.httpRequest.query));
-            console.log("[debug]vs all query hashes in request    : " + JSON.stringify(req.query));
             for (var queryKey in element.httpRequest.query ) {
-              console.log("[debug] request query key   : " + queryKey);
-              console.log("[debug] request query value : " + req.query[queryKey]);
-                console.log("[debug] compared to config query key   : " + queryKey);
-                console.log("[debug] compared to config query value : " + element.httpRequest.query[queryKey]);
               if( typeof req.query[queryKey] === 'undefined' ||
                 element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;
@@ -244,8 +240,8 @@
       }
       else {
         var notFound="<html>Page not found</html>";
-        res.setHeader("Content-Type", "text/html; charset=UTF-8");              
-        res.setHeader("Content-Length", notFound.length);              
+        res.setHeader("Content-Type", "text/html; charset=UTF-8");
+        res.setHeader("Content-Length", notFound.length);
         res.send(notFound, 404);
       }
     }
