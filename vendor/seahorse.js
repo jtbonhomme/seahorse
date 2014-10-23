@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.8 - 2014-10-16 */
+/*! seahorse - v0.0.9 - 2014-10-19 */
 (function(global){
   'use strict';
 
@@ -174,7 +174,13 @@
 
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
+            console.log("[debug] parse all query hashes in config : " + JSON.stringify(element.httpRequest.query));
+            console.log("[debug]vs all query hashes in request    : " + JSON.stringify(req.query));
             for (var queryKey in element.httpRequest.query ) {
+              console.log("[debug] request query key   : " + queryKey);
+              console.log("[debug] request query value : " + req.query[queryKey]);
+                console.log("[debug] compared to config query key   : " + queryKey);
+                console.log("[debug] compared to config query value : " + element.httpRequest.query[queryKey]);
               if( typeof req.query[queryKey] === 'undefined' ||
                 element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;
@@ -237,7 +243,10 @@
         }, (typeof matchingResponse.httpResponse.delay === 'undefined')?1:matchingResponse.httpResponse.delay);
       }
       else {
-        res.send("Not found", 404);
+        var notFound="<html>Page not found</html>";
+        res.setHeader("Content-Type", "text/html; charset=UTF-8");              
+        res.setHeader("Content-Length", notFound.length);              
+        res.send(notFound, 404);
       }
     }
   };

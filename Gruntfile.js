@@ -103,7 +103,7 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: 'dot'
+          reporter: 'spec'
         },
         src: ['<%= dirs.tmp %>seahorse.js']
       }
