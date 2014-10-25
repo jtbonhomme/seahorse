@@ -232,7 +232,7 @@ This project uses these third packages:
 
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-The seahorse logo was design by [Les vieux garcons](http://www.thenounproject.com/enrique427).
+The seahorse logo was designed by [Les vieux garcons](http://www.thenounproject.com/enrique427).
 
 Todo
 ====
