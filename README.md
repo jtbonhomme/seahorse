@@ -15,8 +15,19 @@ Install it
 Use it
 ======
 
-As a npm package
+In a node script
 ----------------
+
+Start a mock REST API server with a configuration file (config.json) that listen on port 3000 and displays 'apache-like' logs.
+
+```
+var server = require('seahorse');
+console.log("Start seahorse server");
+server.init('config.json', 3000, true);
+```
+
+As a standalone server
+----------------------
 
 Start a mock REST API server with no configuration (no route defined) that listen on port 3000 by default.
 
