@@ -207,6 +207,13 @@ A SSE functionnality is available on route <code>get /stream</code>.
 ## post /stream/:event_name
 
 Any event can be fired to all listeners with the route <code>post /stream/:event_name</code>
+Take care, for now, data SHALL be in JSON format.
+
+To simulate a SSE event sent by the mock API, try :
+
+```
+curl -X POST -H "Content-Type: application/json" --data '{"data":{"326":[18,8,true,false]}, "signal":"LastChange"}' localhost:3000/stream/message
+```
 
 Test
 ====

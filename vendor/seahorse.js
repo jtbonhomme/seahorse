@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.10 - 2014-10-26 */
+/*! seahorse - v0.0.11 - 2014-10-26 */
 (function(global){
   'use strict';
 
@@ -285,7 +285,13 @@
       });
 
       app.post('/stream/:event_name', function(req, res) {
-        var data = req.body;
+        var data = "";
+        try {
+          data = JSON.stringify(req.body);
+        }
+        catch(e) {
+          data = "ERROR";
+        }
         var id   = (new Date()).toLocaleTimeString();
 
         sseClients.forEach(function(element, index, array) {
