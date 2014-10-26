@@ -7,7 +7,7 @@ describe("[seahorse.js] ", function(){
     {
       "httpRequest" : {
           "method" : "get",
-          "path" : "/foo"
+          "path" : "/foo/"
       },
       "httpResponse" : {
           "statusCode" : 200,
@@ -48,7 +48,7 @@ describe("[seahorse.js] ", function(){
     {
       "httpRequest" : {
           "method" : "delete",
-          "path" : "/foo"
+          "path" : "/foo/"
       },
       "httpResponse" : {
           "statusCode" : 203,
@@ -151,11 +151,36 @@ describe("[seahorse.js] ", function(){
         done();
       });
     });
+    it('should be 200 when request get /foo/', function(done) {
+      api()
+      .json()
+      .base('http://localhost:3000')
+      .get('/foo/')
+      .expectStatus(200)
+      .expectHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+      .expectHeader('Content-Type', 'application/json; charset=utf-8')
+      .expectBody({"key": "value"})
+      .end(function(err, res, body) {
+        if (err) throw err;
+        done();
+      });
+    });
     it('should be 201 when request post /foo', function(done) {
       api()
       .json()
       .base('http://localhost:3000')
       .post('/foo')
+      .expectStatus(201)
+      .end(function(err, res, body) {
+        if (err) throw err;
+        done();
+      });
+    });
+    it('should be 201 when request post /foo/', function(done) {
+      api()
+      .json()
+      .base('http://localhost:3000')
+      .post('/foo/')
       .expectStatus(201)
       .end(function(err, res, body) {
         if (err) throw err;
@@ -173,11 +198,34 @@ describe("[seahorse.js] ", function(){
         done();
       });
     });
+    it('should be 202 when request put /foo/', function(done) {
+      api()
+      .json()
+      .base('http://localhost:3000')
+      .put('/foo/')
+      .expectStatus(202)
+      .end(function(err, res, body) {
+        if (err) throw err;
+        done();
+      });
+    });
     it('should be 203 when request delete /foo', function(done) {
       this.timeout(5000);
       api()
       .json()
       .url('http://localhost:3000/foo')
+      .method('DELETE')
+      .expectStatus(203)
+      .end(function(err, res, body) {
+        if (err) throw err;
+        done();
+      });
+    });
+    it('should be 203 when request delete /foo/', function(done) {
+      this.timeout(5000);
+      api()
+      .json()
+      .url('http://localhost:3000/foo/')
       .method('DELETE')
       .expectStatus(203)
       .end(function(err, res, body) {

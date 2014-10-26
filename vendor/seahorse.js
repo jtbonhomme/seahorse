@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.10 - 2014-10-23 */
+/*! seahorse - v0.0.10 - 2014-10-26 */
 (function(global){
   'use strict';
 
@@ -159,7 +159,8 @@
         }
       }
       else {
-        if( element.httpRequest.path  !== req.params[0] ) {
+        // remove trailing slash
+        if( element.httpRequest.path.replace(/\/$/, '')  !== req.params[0].replace(/\/$/, '') ) {
           return false;
         }
       }
