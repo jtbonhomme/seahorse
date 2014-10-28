@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.11 - 2014-10-26 */
+/*! seahorse - v0.0.13 - 2014-10-28 */
 (function(global){
   'use strict';
 
@@ -66,7 +66,8 @@
 
 (function(global, utils){
   'use strict';
-  var util      = require('util');
+  var util      = require('util'),
+      path      = require('path');
 
   var routes = {
   	config: [],
@@ -212,6 +213,7 @@
           }
 
           if( typeof matchingResponse.httpResponse.body !== 'undefined') {
+            res.setHeader("Content-Length", matchingResponse.httpResponse.body.length);
             res.send(matchingResponse.httpResponse.body);
           }
           else {
@@ -226,6 +228,10 @@
             }
 
             if( typeof filename !== 'undefined') {
+              // convert relative path in absolute
+              if( path.resolve(filename)!==filename) {
+                filename = path.normalize(process.cwd()+'/'+filename);
+              }
               if( typeof rate !== 'undefined'){
                 utils._sendfile(filename, res, rate);
               }
@@ -267,7 +273,7 @@
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
       if( logs ) app.use(morgan('combined'));
-      util.log("start seahorse server on port" + (logs?" with logs ":" ") + port);
+      util.log("start seahorse server on port " + port + (logs?" with logs ":" ") );
 
       var sseClients = [];
 
