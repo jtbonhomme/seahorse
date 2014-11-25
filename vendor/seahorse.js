@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.13 - 2014-10-28 */
+/*! seahorse - v0.0.14 - 2014-11-25 */
 (function(global){
   'use strict';
 
@@ -342,7 +342,7 @@
       // mock routes
       app.all("*", function(req, res) {
         if( utils._debug ) {
-          util.log('request ' + req.method + ' ' + req.originalUrl);
+          util.log('[request] ' + req.method + ' ' + req.originalUrl + '\t('+ ((typeof req.headers['user-agent'] !== 'undefined')?req.headers['user-agent']:"unknown") +')');
         }
         routes.all(req, res);
       });

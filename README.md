@@ -197,7 +197,7 @@ Set a new configuration
 Update the configuration. If new routes are specified, they will be added, else, current routes will be updated.
 
 ```
-% curl -X POST --data '[{"httpResquest":...}]' "http://localhost:3000/_config"
+% curl -X PUT --data '[{"httpResquest":...}]' "http://localhost:3000/_config"
 ```
 
 ## get /stream
