@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.14 - 2014-11-25 */
+/*! seahorse - v0.0.14 - 2014-12-03 */
 (function(global){
   'use strict';
 
@@ -8,6 +8,8 @@
 
   var utils = {
     _debug : false,
+    _logs  : false,
+    _cors  : true,
 
     _getExtension: function(filename) {
       var i = filename.lastIndexOf('.');
@@ -20,7 +22,7 @@
 
       stream.on('open', function() {
         if( utils._debug ) {
-          util.log('open ' + filename);
+          util.log('[info] open ' + filename);
         }
         // automaticaly pipes readable stream to res (= writeableStream), data are then transfered
         // with a limited rate through the throttle
@@ -29,7 +31,7 @@
 
       stream.on('data', function(chunk) {
         if( utils._debug ) {
-          util.log('read a chunk  :' + chunk.length + ' bytes');
+          util.log('[info] read a chunk  :' + chunk.length + ' bytes');
         }
       });
 
@@ -101,7 +103,7 @@
       catch(e)
       {
         if( utils._debug ) {
-            util.log("error: input file is not a valid json config file, " + e);
+            util.log("[server] input file is not a valid json config file, " + e);
         }
         return false;
       }
@@ -246,10 +248,20 @@
         }, (typeof matchingResponse.httpResponse.delay === 'undefined')?1:matchingResponse.httpResponse.delay);
       }
       else {
-        var notFound="<html>Page not found</html>";
-        res.setHeader("Content-Type", "text/html; charset=UTF-8");
-        res.setHeader("Content-Length", notFound.length);
-        res.send(notFound, 404);
+        if( utils._debug ) {
+          util.log('[warning] request not configured');
+        }
+        if(req.method.toUpperCase() === 'HEAD') {
+          res.status(500);
+          res.setHeader("Content-Length", 0);
+          res.send();
+        }
+        else {
+          var notFound="<html>Page not found</html>";
+          res.setHeader("Content-Type", "text/html; charset=UTF-8");
+          res.setHeader("Content-Length", notFound.length);
+          res.send(notFound, 404);
+        }
       }
     }
   };
@@ -268,12 +280,12 @@
   var server = {
     _server: null,
 
-    start: function(config, port, logs) {
-      app.use(utils._allowCrossDomain);
+    start: function(config, port) {
+      if( utils._cors ) app.use(utils._allowCrossDomain);
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
-      if( logs ) app.use(morgan('combined'));
-      util.log("start seahorse server on port " + port + (logs?" with logs ":" ") );
+      if( utils._logs ) app.use(morgan('combined'));
+      util.log("[server] start seahorse server on port " + port + (utils._logs?" with logs":"") + (utils._cors?" (CORS are on)":" (CORS are off)") );
 
       var sseClients = [];
 
@@ -343,20 +355,27 @@
       app.all("*", function(req, res) {
         if( utils._debug ) {
           util.log('[request] ' + req.method + ' ' + req.originalUrl + '\t('+ ((typeof req.headers['user-agent'] !== 'undefined')?req.headers['user-agent']:"unknown") +')');
+          util.log('[request] [headers] ' + JSON.stringify(req.headers));
         }
         routes.all(req, res);
       });
   
+      var self = this;
+      process.on( "SIGINT", function() {
+        self.stop();
+      } );
+
       // start listening
       this._server = app.listen(port);
     },
 
-    // never used ... todo: add SIGINT listener to properly close the server
     stop: function() {
+      util.log("[server] stop seahorse server");
+      // todo: ask confirmation
       if( this._server !== null ) {
-        util.log("stop seahorse server");
         this._server.close();      
       }
+      process.exit();
     }
   };
 

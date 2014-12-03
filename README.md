@@ -50,7 +50,9 @@ Usage: seahorse <source> [options]
 Options:
   --help    -h          display this text
   --version -v          output version
-  --logs    -l          activate logs
+  --logs    -l          activate logs   (default: no log)
+  --trace   -t          activate traces (default: no trace)
+  --nocors  -n          deactivate CORS (default: activated)
   --port    -p <port>   set port
 
 Examples:
@@ -244,6 +246,7 @@ The seahorse logo was designed by [Les vieux garcons](http://www.thenounproject.
 Todo
 ====
 
+* Possible issue when using bandwidth field, no Content-length is sent in the response
 * Handle cookies
 
 Licence

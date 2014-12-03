@@ -1,10 +1,11 @@
 (function(global){
   'use strict';
 
-  var util      = require('util');
-  var help      = require('./help').help;
-  var server    = require('../vendor/seahorse').server;
-  var utils     = require('../vendor/seahorse').utils;
+  var util      = require('util'),
+      help      = require('./help').help,
+      server    = require('../vendor/seahorse').server,
+      utils     = require('../vendor/seahorse').utils,
+      path      = require('path');
 
   // Output version
   function version() {
@@ -18,19 +19,20 @@
   }
 
   // Load a config file and start server on a given port
-  function load(source, port, logs) {
+  function load(filename, port) {
     var config = [];
-
     // load config file into config object
-    if (/\.json$/.test(source)) {
-      var path = process.cwd() + '/' + source;
-      config   = require(path);
-      //config   = require(source);
-      server.start(config, port, logs);
+    try {
+      // convert relative path in absolute
+      if( path.resolve(filename)!==filename) {
+        filename = path.normalize(process.cwd()+'/'+filename);
+      }
+      config = require(filename);
     }
-    else {
-      throw "source file has not a json extension";
+    catch(e){
+      util.log("[load] start with empty configuration");
     }
+    server.start(config, port);
   }
 
   // Uses minimist parsed argv in bin/seahorse
@@ -40,12 +42,13 @@
     var port   = argv.port || argv.p;
     var logs   = false;
 
+    if (argv.nocors  || argv.n) utils._cors   = false;
     if (argv.trace   || argv.t) utils._debug = true;
-    if (argv.logs    || argv.l) logs = true;
+    if (argv.logs    || argv.l) utils._logs = true;
     if (argv.version || argv.v) return version();
     if (argv.help    || argv.h) return usage();
 
-    return load(source, (typeof port === "number")?port:3000, logs);
+    return load(source, (typeof port === "number")?port:3000);
   }
 
   global.run = run;
