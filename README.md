@@ -8,8 +8,18 @@ Seahorse is a configurable mock REST API. I may be used for testing and it is wr
 Install it
 ==========
 
+To use in a node script
+-----------------------
+
 ```
-% npm install seahorse
+% npm install seahorse --save
+````
+
+To use as a standalone server
+-----------------------------
+
+```
+% npm install -g seahorse
 ````
 
 Use it
@@ -38,25 +48,26 @@ Start a mock REST API server with no configuration (no route defined) that liste
 Start a mock REST API server with a configuration file (config.json) that listen on port 4000.
 
 ```
-% seahorse config.json -p 4000
+% seahorse -f config.json -p 4000
 ```
 
 Display help.
 
 ```
 % seahorse config.json -h
-Usage: seahorse <source> [options]
+Usage: seahorse [options] [-f <source>]
 
 Options:
   --help    -h          display this text
   --version -v          output version
+  --file    -f <source> load configuration file
   --logs    -l          activate logs   (default: no log)
   --trace   -t          activate traces (default: no trace)
   --nocors  -n          deactivate CORS (default: activated)
   --port    -p <port>   set port
 
 Examples:
-  seahorse config.json
+  seahorse -f config.json
   seahorse --port 1234
 ```
 
