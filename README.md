@@ -30,11 +30,24 @@ In a node script
 
 Start a mock REST API server with a configuration file (config.json) that listen on port 3000 and displays 'apache-like' logs.
 
-```
+```js
 var server = require('seahorse');
 console.log("Start seahorse server");
-server.init('config.json', 3000, true);
+server.init('config.json', 3000, {"logs": true});
 ```
+
+The initialization function prototype is :
+
+```js
+server.init(file, port, options)
+```
+
+* file (string)    : can be both an absolute or a relative path to a configuration file
+* port (number)    : allow to specify the port of the express server
+* options (object) : can activate extra functionnalities:
+    * traces (boolean) : activates debug traces
+    * logs (boolean)   : activates apache logs traces
+    * cors (boolean)   : configures cors directives
 
 As a standalone server
 ----------------------

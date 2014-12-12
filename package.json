@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/jtbonhomme/seahorse.git"
   },
-  "version": "0.0.15",
+  "version": "0.0.16",
   "author": "jtbonhomme@gmail.com",
   "main": "./lib/main.js",
   "bin": "./bin/seahorse.js",
