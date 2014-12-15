@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.14 - 2014-12-03 */
+/*! seahorse - v0.0.16 - 2014-12-15 */
 (function(global){
   'use strict';
 
@@ -215,7 +215,7 @@
           }
 
           if( typeof matchingResponse.httpResponse.body !== 'undefined') {
-            res.setHeader("Content-Length", matchingResponse.httpResponse.body.length);
+//            res.setHeader("Content-Length", matchingResponse.httpResponse.body.length);
             res.send(matchingResponse.httpResponse.body);
           }
           else {
