@@ -270,6 +270,7 @@ The seahorse logo was designed by [Les vieux garcons](http://www.thenounproject.
 Todo
 ====
 
+* Add unit tests on content-lenght header in responses
 * Possible issue when using bandwidth field, no Content-length is sent in the response
 * Handle cookies
 
