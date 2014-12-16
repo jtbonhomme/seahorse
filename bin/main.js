@@ -21,9 +21,9 @@
   // Load a config file and start server on a given port
   function load(filename, port, options) {
     if( typeof options !== 'undefined' ) {
-      utils._logs  = (typeof options.logs   === 'boolean')?logs:utils._logs;
-      utils._debug = (typeof options.traces === 'boolean')?traces:utils._debug;
-      utils._cors  = (typeof options.cors   === 'boolean')?cors :utils._cors;      
+      utils._logs  = (typeof options.logs   === 'boolean')?options.logs:utils._logs;
+      utils._debug = (typeof options.traces === 'boolean')?options.traces:utils._debug;
+      utils._cors  = (typeof options.cors   === 'boolean')?options.cors :utils._cors;      
     }
 
     var config = [];
