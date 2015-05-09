@@ -78,6 +78,7 @@ Options:
   --trace   -t          activate traces (default: no trace)
   --nocors  -n          deactivate CORS (default: activated)
   --port    -p <port>   set port
+  --rec     -r <output> works like a proxy ans records all requests in a output file
 
 Examples:
   seahorse -f config.json
@@ -248,6 +249,23 @@ Launch tests with :
 
 ```
 % grunt test
+```
+
+Build
+=====
+
+The build task will compile the seahorse 'vendor' library (/vendor/seahorse.js and /vendor/seahorse.min.js)
+
+* build and test
+
+```
+% grunt build
+```
+
+* build only
+
+```
+% grunt build:only
 ```
 
 Thanks

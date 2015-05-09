@@ -122,9 +122,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('build', ['clean:all', 'jshint', 'concat:test', 'mochaTest:test', 'concat:dist', 'uglify:dist']);
-  grunt.registerTask('dev', ['concurrent:dev']);
-  grunt.registerTask('test', ['clean:tmp', 'jshint', 'concat:test', 'mochaTest:test']);
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('build',      ['clean:all', 'jshint', 'concat:test', 'mochaTest:test', 'concat:dist', 'uglify:dist']);
+  grunt.registerTask('build:only', ['clean:all', 'jshint', 'concat:dist', 'uglify:dist']);
+  grunt.registerTask('dev',        ['concurrent:dev']);
+  grunt.registerTask('test',       ['clean:tmp', 'jshint', 'concat:test', 'mochaTest:test']);
+  grunt.registerTask('default',    ['test']);
 
 };
