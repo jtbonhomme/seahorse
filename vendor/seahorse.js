@@ -1,4 +1,4 @@
-/*! seahorse - v0.1.0 - 2015-05-09 */
+/*! seahorse - v0.1.0 - 2015-05-17 */
 (function(global){
   'use strict';
 
@@ -51,7 +51,8 @@
     _allowCrossDomain: function(req, res, next) {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-      res.header('Access-Control-Allow-Headers', '*');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      res.header('Seahorse-version', '0.1.0');
   
       // intercept OPTIONS method
       if ('OPTIONS' == req.method) {
@@ -178,12 +179,13 @@
       var match = this.config.some(function(element, index, array) {
 
         if( that._matchPath(element, req) ) {
-
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
             for (var queryKey in element.httpRequest.query ) {
-              if( typeof req.query[queryKey] === 'undefined' ||
-                element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
+              if( typeof req.query[queryKey] === 'undefined' ) {
+                return false;
+              }
+              else if( element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;
               }
             }
@@ -293,11 +295,17 @@
       // -> path = /operator
       if( utils._proxy ) app.use('/proxy', proxy( function(req){
         var url = require('url');
-        return url.parse(req.url.split('originalUrl=')[1]).host;
+        var host = url.parse(req.url.split('originalUrl=')[1]).host;
+//        return (host?host:url.parse(req.headers.referer).host);
+        return (host?host:'192.168.1.6');
       },{
         forwardPath: function(req, res) {
           var url = require('url');
           return url.parse(url.parse(req.url).query.split('originalUrl=')[1]).path;
+        },
+        decorateRequest: function(req) {
+          console.log("[proxy] " + req.method + " - " + req.hostname + " - " + req.path);
+          return req;
         }
       }));
 
