@@ -1,4 +1,4 @@
-/*! seahorse - v0.0.16 - 2014-12-15 */
+/*! seahorse - v0.1.0 - 2015-05-17 */
 (function(global){
   'use strict';
 
@@ -10,6 +10,7 @@
     _debug : false,
     _logs  : false,
     _cors  : true,
+    _proxy : false,
 
     _getExtension: function(filename) {
       var i = filename.lastIndexOf('.');
@@ -50,7 +51,8 @@
     _allowCrossDomain: function(req, res, next) {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      res.header('Seahorse-version', '0.1.0');
   
       // intercept OPTIONS method
       if ('OPTIONS' == req.method) {
@@ -177,12 +179,13 @@
       var match = this.config.some(function(element, index, array) {
 
         if( that._matchPath(element, req) ) {
-
           if( typeof element.httpRequest.query !== 'undefined' ) {
             // do all query parameters match with config ?
             for (var queryKey in element.httpRequest.query ) {
-              if( typeof req.query[queryKey] === 'undefined' ||
-                element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
+              if( typeof req.query[queryKey] === 'undefined' ) {
+                return false;
+              }
+              else if( element.httpRequest.query[queryKey].toString() !== req.query[queryKey].toString() ) {
                  return false;
               }
             }
@@ -275,6 +278,8 @@
   var express = require('express');
   var morgan  = require('morgan');
   var util    = require('util');
+  var proxy  = require('express-http-proxy');
+
   var app     = express();
 
   var server = {
@@ -285,8 +290,26 @@
       app.use(express.json());       // to support JSON-encoded bodies
       app.use(express.urlencoded()); // to support URL-encoded bodies
       if( utils._logs ) app.use(morgan('combined'));
-      util.log("[server] start seahorse server on port " + port + (utils._logs?" with logs":"") + (utils._cors?" (CORS are on)":" (CORS are off)") );
+      // http://127.0.0.1:3000/proxy?originalUrl=http://webapp.local/operator
+      // -> host = webapp.local
+      // -> path = /operator
+      if( utils._proxy ) app.use('/proxy', proxy( function(req){
+        var url = require('url');
+        var host = url.parse(req.url.split('originalUrl=')[1]).host;
+//        return (host?host:url.parse(req.headers.referer).host);
+        return (host?host:'192.168.1.6');
+      },{
+        forwardPath: function(req, res) {
+          var url = require('url');
+          return url.parse(url.parse(req.url).query.split('originalUrl=')[1]).path;
+        },
+        decorateRequest: function(req) {
+          console.log("[proxy] " + req.method + " - " + req.hostname + " - " + req.path);
+          return req;
+        }
+      }));
 
+      util.log("[server] start seahorse server on port " + port + (utils._logs?" with logs":"") + (utils._proxy?" with proxy activated":"")+ (utils._cors?" (CORS are on)":" (CORS are off)") );
       var sseClients = [];
 
       app.get("/stream", function(req, res) {
