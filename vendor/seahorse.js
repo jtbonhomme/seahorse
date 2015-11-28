@@ -17,7 +17,7 @@
       return (i < 0) ? '' : filename.substr(i);
     },
 
-    _sendfile: function(filename, res, rate) {      
+    _sendfile: function(filename, res, rate) {
       var stream = fs.createReadStream(filename);
       var th = new Throttle(rate);
 
@@ -313,7 +313,7 @@
       var sseClients = [];
 
       app.get("/stream", function(req, res) {
-        req.socket.setTimeout(Infinity);
+        req.socket.setTimeout(Number.MAX_VALUE);
         res.writeHead(200, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
