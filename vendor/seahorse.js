@@ -1,4 +1,4 @@
-/*! seahorse - v0.1.0 - 2015-05-17 */
+/*! seahorse - v0.1.3 - 2015-11-28 */
 (function(global){
   'use strict';
 
@@ -17,7 +17,7 @@
       return (i < 0) ? '' : filename.substr(i);
     },
 
-    _sendfile: function(filename, res, rate) {
+    _sendfile: function(filename, res, rate) {      
       var stream = fs.createReadStream(filename);
       var th = new Throttle(rate);
 
