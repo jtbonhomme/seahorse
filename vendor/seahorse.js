@@ -1,4 +1,4 @@
-/*! seahorse - v0.1.3 - 2015-11-28 */
+/*! seahorse - v0.1.4 - 2015-11-29 */
 (function(global){
   'use strict';
 
@@ -71,10 +71,17 @@
 (function(global, utils){
   'use strict';
   var util      = require('util'),
-      path      = require('path');
+      path      = require('path'),
+      fs        = require('fs');
 
   var routes = {
   	config: [],
+
+    getFilesizeInBytes: function(filename) {
+      var stats = fs.statSync(filename);
+      var fileSizeInBytes = stats.size;
+      return fileSizeInBytes;
+    },
 
     checkConfig: function(config) {
       try
@@ -241,6 +248,7 @@
                 utils._sendfile(filename, res, rate);
               }
               else {
+                res.setHeader("Content-Length", that.getFilesizeInBytes(filename));
                 res.sendfile(filename);
               }
             }
