@@ -268,6 +268,15 @@ The build task will compile the seahorse 'vendor' library (/vendor/seahorse.js a
 % grunt build:only
 ```
 
+* install locally seahorse
+
+```
+% grunt build
+% npm install -g .
+% seahorse -f example/config.json -p 8080
+% curl -ivvv 'http://127.0.0.1:8080/_config'
+```
+
 Thanks
 ======
 
