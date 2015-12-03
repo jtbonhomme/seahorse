@@ -72,7 +72,6 @@ describe("[routes.js] ", function(){
       }
     ];
 
-
     describe('Test checkConfig method of routes module', function() {
         describe('with a config file with is not a json', function() {
             it('should returns false', function() {
@@ -214,6 +213,124 @@ describe("[routes.js] ", function(){
                 routes.config[0].httpRequest.method.should.eql('get');
                 routes.config[1].httpRequest.method.should.eql('post');
                 done();
+            });
+        });
+    });
+
+    var staticConfig = [
+      {
+        "httpRequest" : {
+            "method" : "get",
+            "path" : "regexp:^\/.*\.json$"
+        },
+        "httpResponse" : {
+            "statusCode" : 200,
+            "static" : ".",
+            "headers" : [ {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type, Authorization"
+            },
+            {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+            } ]
+        }
+      }
+    ];
+
+    describe('Test static file serving of routes module', function() {
+        describe('get a resource', function() {
+            beforeEach(function(){
+              routes.setConfig(staticConfig);
+            });
+            it('should returns a 200 status code and an empty array', function(done) {
+              api()
+              .json()
+              .base('http://localhost:3000')
+              .get('/specs/empty.json')
+              .expectStatus(200)
+              .expectHeader('Content-Type', 'application/json; charset=utf-8')
+              .expectBody([])
+              .end(function(err, res, body) {
+                if (err) throw err;
+                done();
+              });
+            });
+            it('should returns a 200 status code and an simple array', function(done) {
+              api()
+              .json()
+              .base('http://localhost:3000')
+              .get('/specs/array.json')
+              .expectStatus(200)
+              .expectHeader('Content-Type', 'application/json; charset=utf-8')
+              .expectBody([1, 2, 3])
+              .end(function(err, res, body) {
+                if (err) throw err;
+                done();
+              });
+            });
+            it('should returns a 404 status code for an unknown resource', function(done) {
+              api()
+              .base('http://localhost:3000')
+              .get('/specs/unknown.json')
+              .expectStatus(404)
+              .end(function(err, res, body) {
+                if (err) throw err;
+                done();
+              });
+            });
+        });
+    });
+
+    var fileConfig = [
+      {
+        "httpRequest" : {
+            "method" : "get",
+            "path" : "/array.json"
+        },
+        "httpResponse" : {
+            "statusCode" : 200,
+            "file" : "specs/array.json",
+            "headers" : [ {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type, Authorization"
+            },
+            {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+            } ]
+        }
+      }
+    ];
+
+    describe('Test direct file serving of routes module', function() {
+        describe('get a resource', function() {
+            beforeEach(function(){
+              routes.setConfig(fileConfig);
+            });
+            it('should returns a 200 status code and an simple array', function(done) {
+              api()
+              .json()
+              .base('http://localhost:3000')
+              .get('/array.json')
+              .expectStatus(200)
+              .expectHeader('Content-Type', 'application/json; charset=utf-8')
+              .expectHeader('Content-length', '9')
+              .expectBody([1, 2, 3])
+              .end(function(err, res, body) {
+                if (err) throw err;
+                done();
+              });
+            });
+            it('should returns a 404 status code for an unknown resource', function(done) {
+              api()
+              .base('http://localhost:3000')
+              .get('/unknown.json')
+              .expectStatus(404)
+              .end(function(err, res, body) {
+                if (err) throw err;
+                done();
+              });
             });
         });
     });
