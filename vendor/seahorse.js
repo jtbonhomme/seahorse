@@ -1,4 +1,4 @@
-/*! seahorse - v0.1.4 - 2015-12-03 */
+/*! seahorse - v0.2.0 - 2016-04-14 */
 (function(global){
   'use strict';
 
@@ -6,28 +6,40 @@
   var Throttle   = require('throttle');
   var util       = require('util');
 
+  var BASE_RATE = 2 * 1000 * 1000 / 8; // 2MBps = 2Mbps/8
+
   var utils = {
     _debug : false,
     _logs  : false,
     _cors  : true,
     _proxy : false,
+    _th    : new Throttle(BASE_RATE),
+    _bps   : BASE_RATE,
 
     _getExtension: function(filename) {
       var i = filename.lastIndexOf('.');
       return (i < 0) ? '' : filename.substr(i);
     },
 
+    _setRate: function(newrate) {
+      this._th.setBps(newrate);
+      this._bps = newrate;
+    },
+
+    _getRate: function() {
+      return this._bps;
+    },
+
     _sendfile: function(filename, res, rate) {      
       var stream = fs.createReadStream(filename);
-      var th = new Throttle(rate);
-
+      var self = this;
       stream.on('open', function() {
         if( utils._debug ) {
           util.log('[info] open ' + filename);
         }
         // automaticaly pipes readable stream to res (= writeableStream), data are then transfered
         // with a limited rate through the throttle
-        stream.pipe(th).pipe(res);
+        stream.pipe(self._th).pipe(res);
       });
 
       stream.on('data', function(chunk) {
@@ -342,6 +354,17 @@
         res.write('\n');
       });
 
+      app.post('/_rate/:bps', function(req, res) {
+        utils._setRate(req.params.bps);
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify({bps: utils._getRate()}));
+      });
+
+      app.get('/_rate', function(req, res) {
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.send(JSON.stringify({bps: utils._getRate()}), 200);
+      });
+
       app.post('/stream/:event_name', function(req, res) {
         var data = "";
         try {
@@ -372,7 +395,7 @@
         var newConfig = req.body;
         routes.setConfig(newConfig, app);
         res.setHeader("Content-Type", "application/json; charset=utf-8");
-        res.send(JSON.stringify(routes.getConfig()), 200);
+        res.send(JSON.stringify(routes.getConfig()));
       });
   
       // route for updating the current configuration (update the previous one with the new keys)

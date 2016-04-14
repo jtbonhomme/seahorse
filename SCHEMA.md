@@ -49,10 +49,6 @@ Configuration file schema
             "type" : "string",
             "format": "url",
           },
-          "bandwidth" :  {
-            "type" : "number",
-            "required" : false
-          },
           "header" :  {
             "type" : "array",
             "required" : false,

@@ -159,7 +159,7 @@ The httpResponse is an object that specify, if the request matches the httpReque
     * <code>body</code>   : object to be returned in the response payload,
     * <code>file</code>   : path of a static local file to be returned in the response payload, 
     * <code>static</code> : local root path to search for resources to be returned in the response payload (for example, if path equals <code>/foo/bar.txt</code> and static equals <code>/home/jtbonhomme/seahorse/static</code>, the seahorse will serve the file <code>/home/jtbonhomme/seahorse/static/foo/bar.txt</code>) 
-* optionnaly, in case of static file shall be served (use of <code>file</code> or <code>static</code>), you can specify a maximum <code>bandwidth</code> (in bytes per seconds) to serve the file.
+* optionnaly, in case of static file shall be served (use of <code>file</code> or <code>static</code>), you can specify a maximum <code>bandwidth</code> (in bytes per seconds) to serve the file. Use the route <code>POST /rate</code> to limit the bandwidth.
 * optionnaly, some <code>headers</code> to be added to the response, 
 * and, optionnaly, a <code>delay</code> that will simulate server latency can be added.
 
@@ -225,6 +225,24 @@ Update the configuration. If new routes are specified, they will be added, else,
 
 ```
 % curl -X PUT --data '[{"httpResquest":...}]' "http://localhost:3000/_config"
+```
+
+## post /_rate/:bps
+
+Update the maximum bitrate of the server for static resources serving. By default, the max bitrate is 2MBps (2 * 1000 * 1000 / 8 bit per second)
+
+```
+% curl "http://localhost:3000/_rate/5000 -X POST"
+{"rate":5000}
+```
+
+## get /_rate
+
+Get the current bitrate.
+
+```
+% curl "http://localhost:3000/_rate"
+{"rate":250000}
 ```
 
 ## get /stream
