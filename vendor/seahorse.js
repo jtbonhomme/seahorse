@@ -1,4 +1,4 @@
-/*! seahorse - v0.2.0 - 2016-04-14 */
+/*! seahorse - v0.2.2 - 2016-04-15 */
 (function(global){
   'use strict';
 
@@ -30,7 +30,7 @@
       return this._bps;
     },
 
-    _sendfile: function(filename, res, rate) {      
+    _sendfile: function(filename, res) {      
       var stream = fs.createReadStream(filename);
       var self = this;
       stream.on('open', function() {
@@ -241,8 +241,7 @@
             res.send(matchingResponse.httpResponse.body);
           }
           else {
-            var filename,
-                rate = matchingResponse.httpResponse.bandwidth;
+            var filename;
 
             if( typeof matchingResponse.httpResponse.file !== 'undefined') {
               filename = matchingResponse.httpResponse.file;
@@ -257,14 +256,8 @@
                 if( path.resolve(filename)!==filename) {
                   filename = path.normalize(process.cwd()+'/'+filename);
                 }
-                if( typeof rate !== 'undefined'){
-                  res.setHeader("Content-Length", that.getFilesizeInBytes(filename));
-                  utils._sendfile(filename, res, rate);
-                }
-                else {
-                  res.setHeader("Content-Length", that.getFilesizeInBytes(filename));
-                  res.sendfile(filename);
-                }
+                res.setHeader("Content-Length", that.getFilesizeInBytes(filename));
+                utils._sendfile(filename, res);
               }
               catch(e) {
                 var notFound="<html>File '+filename+' not found</html>";
