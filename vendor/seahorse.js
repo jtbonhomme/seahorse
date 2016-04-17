@@ -1,4 +1,4 @@
-/*! seahorse - v0.2.2 - 2016-04-15 */
+/*! seahorse - v0.2.2 - 2016-04-17 */
 (function(global){
   'use strict';
 
@@ -13,7 +13,7 @@
     _logs  : false,
     _cors  : true,
     _proxy : false,
-    _th    : new Throttle(BASE_RATE),
+    _th    : null,
     _bps   : BASE_RATE,
 
     _getExtension: function(filename) {
@@ -33,6 +33,7 @@
     _sendfile: function(filename, res) {      
       var stream = fs.createReadStream(filename);
       var self = this;
+      this._th = new Throttle(this._bps);
       stream.on('open', function() {
         if( utils._debug ) {
           util.log('[info] open ' + filename);
@@ -49,6 +50,7 @@
       });
 
       stream.on('close', function(chunk) {
+        self._th.reset();
         if( utils._debug ) {
           util.log('closed ' + filename);
         }
