@@ -1,4 +1,4 @@
-/*! seahorse - v0.2.3 - 2016-04-17 */
+/*! seahorse - v0.2.4 - 2016-04-17 */
 (function(global){
   'use strict';
 
@@ -22,8 +22,8 @@
     },
 
     _setRate: function(newrate) {
-      this._th.setBps(newrate);
-      this._bps = newrate;
+      if (this._th) this._th.setBps(newrate);
+      this._bps = parseInt(newrate);
     },
 
     _getRate: function() {
