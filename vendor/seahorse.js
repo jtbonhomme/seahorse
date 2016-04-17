@@ -1,4 +1,4 @@
-/*! seahorse - v0.2.2 - 2016-04-17 */
+/*! seahorse - v0.2.3 - 2016-04-17 */
 (function(global){
   'use strict';
 
@@ -50,7 +50,6 @@
       });
 
       stream.on('close', function(chunk) {
-        self._th.reset();
         if( utils._debug ) {
           util.log('closed ' + filename);
         }
