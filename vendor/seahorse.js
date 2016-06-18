@@ -1,4 +1,4 @@
-/*! seahorse - v0.2.4 - 2016-04-17 */
+/*! seahorse - v0.2.6 - 2016-06-18 */
 (function(global){
   'use strict';
 
@@ -432,7 +432,6 @@
       if( this._server !== null ) {
         this._server.close();      
       }
-      process.exit();
     }
   };
 

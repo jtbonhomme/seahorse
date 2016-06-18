@@ -48,6 +48,10 @@
     return server.start(config, (typeof port === "number")?port:3000);
   }
 
+  function close() {
+    server.stop();
+  }
+
   // Uses minimist parsed argv in bin/seahorse
   function run(argv) {
     var port   = argv.port || argv.p;
@@ -70,4 +74,5 @@
 
   global.run = run;
   global.init = load;
+  global.close = close;
 }(this));
